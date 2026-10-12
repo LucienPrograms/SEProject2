@@ -1,18 +1,106 @@
-classDiagram
+   classDiagram
     class Program {
-        +string name
-        +List ~Command~ Commands
-        +Grid Grid
-        +Character character
-        +Metrics CalculateMetrics
+        +string Name
+        +List~Command~ Commands
+        +Execute()
+        +ToString() string
     }
 
-    class ProgramImporter{
-        +Program ImportFromFile(string filePath)
-        +Program ImportFromCommandline(string line)
+    class Command {
+        <<abstract>>
+        +Execute(CharacterState state)
+        +GetCommandCount() int
+        +GetMaxNestingLevel() int
+        +GetRepeatCount() int
     }
 
-    class LineParser{
-        +List ~parsedLine~ parseBlock(string [] lines)
-        -int getIndent(string Line)
+    class MoveCommand {
+        +int Steps
+        +Execute(CharacterState state)
+        +GetCommandCount() int
+        +GetMaxNestingLevel() int
+        +GetRepeatCount() int
     }
+
+    class TurnCommand {
+        +Direction Direction
+        +Execute(CharacterState state)
+        +GetCommandCount() int
+        +GetMaxNestingLevel() int
+        +GetRepeatCount() int
+    }
+
+    class RepeatCommand {
+        +int Amount
+        +List~Command~ Commands
+        +AddCommand(Command command)
+        +Execute(CharacterState state)
+        +GetCommandCount() int
+        +GetMaxNestingLevel() int
+        +GetRepeatCount() int
+    }
+
+    class Direction {
+        <<enumeration>>
+        North
+        East
+        South
+        West
+    }
+
+    class CharacterState {
+        +int X
+        +int Y
+        +Direction Facing
+        +Move(int steps)
+        +TurnLeft()
+        +TurnRight()
+    }
+
+    class ProgramImporter {
+        +ImportFromFile(string filePath) Program
+        +ImportFromCommandLine(string text) Program
+    }
+
+    class LineParser {
+        +ParseBlock(string[] lines) List~Command~
+        -GetIndent(string line) int
+    }
+
+    class ProgramMetrics {
+        +int CommandCount
+        +int MaxNestingLevel
+        +int RepeatCount
+        +Calculate(Program program) ProgramMetrics
+    }
+
+    class ProgramExecutor {
+        +Execute(Program program) ExecutionResult
+    }
+
+    class ExecutionResult {
+        +List~string~ Trace
+        +CharacterState FinalState
+    }
+
+    class ExamplePrograms {
+        +GetBasicPrograms() List~Program~
+        +GetAdvancedPrograms() List~Program~
+        +GetExpertPrograms() List~Program~
+    }
+
+    Program "1" *-- "0..*" Command : contains
+    Command <|-- MoveCommand
+    Command <|-- TurnCommand
+    Command <|-- RepeatCommand
+    RepeatCommand "1" *-- "0..*" Command : contains
+    TurnCommand --> Direction
+    CharacterState --> Direction
+    ProgramImporter --> LineParser : uses
+    ProgramImporter ..> Program : creates
+    LineParser ..> Command : parses
+    ProgramExecutor --> Program : executes
+    ProgramExecutor --> CharacterState : updates
+    ProgramExecutor --> ExecutionResult : returns
+    ProgramMetrics ..> Program : analyses
+    ExamplePrograms ..> Program : creates
