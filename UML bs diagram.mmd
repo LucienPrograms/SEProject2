@@ -1,0 +1,18 @@
+classDiagram
+    class Program {
+        +string name
+        +List ~Command~ Commands
+        +Grid Grid
+        +Character character
+        +Metrics CalculateMetrics
+    }
+
+    class ProgramImporter{
+        +Program ImportFromFile(string filePath)
+        +Program ImportFromCommandline(string line)
+    }
+
+    class LineParser{
+        +List ~parsedLine~ parseBlock(string [] lines)
+        -int getIndent(string Line)
+    }
