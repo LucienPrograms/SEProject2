@@ -9,25 +9,16 @@
     class Command {
         <<abstract>>
         +Execute(CharacterState state)
-        +GetCommandCount() int
-        +GetMaxNestingLevel() int
-        +GetRepeatCount() int
     }
 
     class MoveCommand {
         +int Steps
         +Execute(CharacterState state)
-        +GetCommandCount() int
-        +GetMaxNestingLevel() int
-        +GetRepeatCount() int
     }
 
     class TurnCommand {
         +Direction Direction
         +Execute(CharacterState state)
-        +GetCommandCount() int
-        +GetMaxNestingLevel() int
-        +GetRepeatCount() int
     }
 
     class RepeatCommand {
@@ -53,8 +44,6 @@
         +int Y
         +Direction Facing
         +Move(int steps)
-        +TurnLeft()
-        +TurnRight()
     }
 
     class ProgramImporter {
