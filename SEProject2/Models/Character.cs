@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 
 namespace SEProject2.Models
@@ -10,7 +13,7 @@ namespace SEProject2.Models
 
         public int Y { get; private set; }
 
-        public Direction Facing { get; private set; }
+        public Direction.Heading Facing { get; private set; }
 
         private readonly List <String> executedCommandTrace = new List<string>();
 
@@ -23,7 +26,7 @@ namespace SEProject2.Models
         {
             X = 0;
             Y = 0;
-            Facing = Direction.EAST;
+            Facing = Direction.Heading.EAST;
             executedCommandTrace.Clear();
         }
 
@@ -33,76 +36,42 @@ namespace SEProject2.Models
             {
                 throw new ArgumentOutOfRangeException(nameof(steps),"Steps cannot be negative");
             }
-
-            for (int i = 0; i < steps; i++)
-            {
-
-                switch (Facing)
+            try
+            {   
+                int x, y;
+                (x, y) = Direction.Step[Facing];
+                for (int i = 0; i < steps; i++)
                 {
-                    case Direction.NORTH:
-                        Y += 1;
-                        break;
-                    case Direction.EAST:
-                        X += 1;
-                        break;
-                    case Direction.SOUTH:
-                        Y -= 1;
-                        break;
-                    case Direction.WEST:
-                        X -= 1;
-                        break;
-                    default:
-                        throw new InvalidOperationException("Unknown direction");
+                    X = X + x;
+                    Y = Y + y;
                 }
             }
-
-            executedCommandTrace.Add($"Move {steps}");
+            catch
+            {
+                throw new InvalidOperationException("Unknown direction");
+            }
         }
 
-        public void TurnLeft()
+        public void Turn(Direction.LeftRight direction)
         {
-            switch (Facing)
+            try
             {
-                case Direction.NORTH:
-                    Facing = Direction.WEST;
-                    break;
-                case Direction.EAST:
-                    Facing = Direction.NORTH;
-                    break;
-                case Direction.SOUTH:
-                    Facing = Direction.EAST;
-                    break;
-                case Direction.WEST:
-                    Facing = Direction.SOUTH;
-                    break;
-                default:
-                    throw new InvalidOperationException("Unknown direction");
+                switch (direction)
+                {                
+                    case Direction.LeftRight.Left:
+                        Facing = Direction.Left[Facing];
+                        executedCommandTrace.Add("Turn left");
+                        break;
+                    case Direction.LeftRight.Right:
+                        Facing = Direction.Right[Facing];
+                        executedCommandTrace.Add("Turn right");
+                        break;
+                }                
             }
-
-            executedCommandTrace.Add("Turn left");
-        }
-
-        public void TurnRight()
-        {
-            switch (Facing)
+            catch
             {
-                case Direction.NORTH:
-                    Facing = Direction.EAST;
-                    break;
-                case Direction.EAST:
-                    Facing = Direction.SOUTH;
-                    break;
-                case Direction.SOUTH:
-                    Facing = Direction.WEST;
-                    break;
-                case Direction.WEST:
-                    Facing = Direction.NORTH;
-                    break;
-                default:
-                    throw new InvalidOperationException("Unknown direction");
+                throw new InvalidOperationException("Unknown direction");
             }
-
-            executedCommandTrace.Add("Turn right");
         }
 
         public string GetState()
