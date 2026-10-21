@@ -27,12 +27,12 @@ public class Character
     {
         try
         {   
-            int x, y;
-            (x, y) = Direction.Step[Facing];
+            int dx, dy;
+            (dx, dy) = Direction.Step[Facing];
             for (int i = 0; i < steps; i++)
             {
-                X = X + x;
-                Y = Y + y;
+                X = X + dx;
+                Y = Y + dy;
             }
             executedCommandTrace.Add($"Move {steps}");
         }
