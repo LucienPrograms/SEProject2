@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using SEProject2.Models;
 
-namespace SEProject2.Domain
+namespace SEProject2.Domain;
+
+public record TurnCommand(Direction.LeftRight direction) : ICommand
 {
-    internal class TurnCommand
-    {
-    }
+    public void Execute(Character c) => c.Turn(direction);
 }
