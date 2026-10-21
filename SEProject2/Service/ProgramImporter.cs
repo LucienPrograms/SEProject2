@@ -2,7 +2,7 @@
 
 namespace SEProject2.Service;
 
-public class ProgramImporter
+public static class ProgramImporter
 {
     public static Models.UserProgram ImportFromFile(string filePath)
     {

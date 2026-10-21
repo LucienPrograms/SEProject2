@@ -1,5 +1,6 @@
-namespace SEProject2.Tests;
 using SEProject2.Models;
+
+namespace SEProject2.Tests.ModelsTests;
 
 public class DirectionTests
 {

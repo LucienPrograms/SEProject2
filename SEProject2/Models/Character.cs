@@ -8,69 +8,44 @@ public class Character
 
     public Direction.Heading Facing { get; private set; }
 
-    private readonly List <String> executedCommandTrace = new List<string>();
+    private readonly List<string> _executedCommandTrace = [];
 
-    public Character()
-    {
-        ResetToStart();
-    }
+    public Character() => ResetToStart();
 
     public void ResetToStart()
     {
         X = 0;
         Y = 0;
         Facing = Direction.Heading.East;
-        executedCommandTrace.Clear();
+        _executedCommandTrace.Clear();
     }
 
     public void MoveForward(uint steps)
     {
-        try
-        {   
-            int dx, dy;
-            (dx, dy) = Direction.Step[Facing];
-            for (int i = 0; i < steps; i++)
-            {
-                X = X + dx;
-                Y = Y + dy;
-            }
-            executedCommandTrace.Add($"Move {steps}");
-        }
-        catch
+        var (dx, dy) = Direction.Step[Facing];
+        for (int i = 0; i < steps; i++)
         {
-            throw new InvalidOperationException("Unknown direction");
+            X = X + dx;
+            Y = Y + dy;
         }
+        _executedCommandTrace.Add($"Move {steps}");
     }
 
     public void Turn(Direction.LeftRight direction)
     {
-        try
+        if (direction == Direction.LeftRight.Left)
         {
-            switch (direction)
-            {                
-                case Direction.LeftRight.Left:
-                    Facing = Direction.Left[Facing];
-                    executedCommandTrace.Add("Turn left");
-                    break;
-                case Direction.LeftRight.Right:
-                    Facing = Direction.Right[Facing];
-                    executedCommandTrace.Add("Turn right");
-                    break;
-            }                
+            Facing = Direction.Left[Facing];
+            _executedCommandTrace.Add("Turn left");
         }
-        catch
+        else
         {
-            throw new InvalidOperationException("Unknown direction");
-        }
+            Facing = Direction.Right[Facing];
+            _executedCommandTrace.Add("Turn right");
+        }   
     }
 
-    public string GetState()
-    {
-        return $"({X}, {Y}) facing {Facing.ToString().ToLower()}";
-    }
+    public string GetState() => $"({X}, {Y}) facing {Facing.ToString().ToLower()}";
 
-    public IReadOnlyList<string> GetTraceEntries()
-    {
-        return executedCommandTrace.AsReadOnly();
-    }
+    public IReadOnlyList<string> GetTraceEntries() => _executedCommandTrace.AsReadOnly();
 }

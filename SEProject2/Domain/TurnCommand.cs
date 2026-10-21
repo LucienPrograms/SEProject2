@@ -2,7 +2,7 @@
 
 namespace SEProject2.Domain;
 
-public record TurnCommand(Direction.LeftRight direction) : ICommand
+public class TurnCommand(Direction.LeftRight direction) : ICommand
 {
     public void Execute(Character c) => c.Turn(direction);
 }

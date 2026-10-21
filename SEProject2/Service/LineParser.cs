@@ -1,13 +1,12 @@
 ﻿namespace SEProject2.Service;
 
-public class LineParser
+public static class LineParser
 {
     public static List<ParsedLine> ParseBlock(string[] lines)
     {
         var parsed = new List<ParsedLine>();
-        for (int index = 0; index < lines.Length; index++)
+        foreach (var line in lines)
         {
-            string line = lines[index];
             if (string.IsNullOrWhiteSpace(line))
             {
                 continue;

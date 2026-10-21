@@ -1,20 +1,20 @@
-﻿using System.Reflection;
-using SEProject2.Domain;
-using SEProject2.Models;
+﻿using SEProject2.Models;
 using SEProject2.Service;
 
 namespace SEProject2;
 
 internal static class Program
 {
-    private static void Main(string[] args)
+    private static void Main()
     {
-        Console.WriteLine("Step 1: Load a program");
+        while (true)
+        {
+            Console.WriteLine("Step 1: Load a program");
 
-        Console.WriteLine($"  1) Example 1");
-        Console.WriteLine($"  2) Example 2");
-        Console.WriteLine($"  3) Example 3");
-        Console.WriteLine($"  4) Import from another text file");
+        Console.WriteLine("  1) Example 1");
+        Console.WriteLine("  2) Example 2");
+        Console.WriteLine("  3) Example 3");
+        Console.WriteLine("  4) Import from another text file");
 
         Console.Write($"Choose [1-4]: ");
 
@@ -29,33 +29,33 @@ internal static class Program
                 return;
             }
 
-            if (choiceNumber == 1)
+            switch (choiceNumber)
             {
-                prog = UserProgram.Example1();
-            } else if (choiceNumber == 2)
-            { 
-                prog = UserProgram.Example2();
-            }
-            else if (choiceNumber == 3)
-            {
-                prog = UserProgram.Example3();
-            }
-            else if (choiceNumber == 4)
-            {
-                Console.Write("Enter path to program text file: ");
-                string? filePath = Console.ReadLine();
-
-                if (string.IsNullOrWhiteSpace(filePath))
+                case 1:
+                    prog = UserProgram.Example1();
+                    break;
+                case 2:
+                    prog = UserProgram.Example2();
+                    break;
+                case 3:
+                    prog = UserProgram.Example3();
+                    break;
+                case 4:
                 {
-                    Console.WriteLine("No file path provided. Exiting.");
-                    return;
+                    Console.Write("Enter path to program text file: ");
+                    string? filePath = Console.ReadLine();
+
+                    if (string.IsNullOrWhiteSpace(filePath))
+                    {
+                        Console.WriteLine("No file path provided. Exiting.");
+                        return;
+                    }
+                    prog = ProgramImporter.ImportFromFile(filePath);
+                    break;
                 }
-                prog = ProgramImporter.ImportFromFile(filePath);
-            }
-            else
-            {
-                Console.WriteLine("Invalid choice. Exiting.");
-                return;
+                default:
+                    Console.WriteLine("Invalid choice. Exiting.");
+                    return;
             }
         }
         catch (Exception ex)
@@ -92,6 +92,7 @@ internal static class Program
             default:
                 Console.WriteLine("Invalid choice. Exiting.");
                 return;
+        }
         }
     }
 }

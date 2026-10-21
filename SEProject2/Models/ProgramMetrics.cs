@@ -27,20 +27,11 @@ public class ProgramMetrics
         Console.WriteLine($"Repeat count: {RepeatCount}");
     }
 
-    private int CalculateCommandCount(UserProgram p)
-    {
-        return CountCommandsRecursive(p.Commands);
-    }
+    private static int CalculateCommandCount(UserProgram p) => CountCommandsRecursive(p.Commands);
 
-    private int CalculateMaxNesting(UserProgram p)
-    {
-        return ComputeMaxNesting(p.Commands, 0);
-    }
+    private static int CalculateMaxNesting(UserProgram p) => ComputeMaxNesting(p.Commands, 0);
 
-    private int CalculateRepeatCount(UserProgram p)
-    {
-        return CountRepeatsRecursive(p.Commands);
-    }
+    private static int CalculateRepeatCount(UserProgram p) => CountRepeatsRecursive(p.Commands);
 
     private static int CountCommandsRecursive(IEnumerable<ICommand> commands)
     {
@@ -61,13 +52,11 @@ public class ProgramMetrics
         int maxDepth = currentDepth;
         foreach (var command in commands)
         {
-            if (command is RepeatCommand repeat)
+            if (command is not RepeatCommand repeat) continue;
+            int childDepth = ComputeMaxNesting(repeat.SubCommands, currentDepth + 1);
+            if (childDepth > maxDepth)
             {
-                int childDepth = ComputeMaxNesting(repeat.SubCommands, currentDepth + 1);
-                if (childDepth > maxDepth)
-                {
-                    maxDepth = childDepth;
-                }
+                maxDepth = childDepth;
             }
         }
         return maxDepth;
@@ -78,11 +67,9 @@ public class ProgramMetrics
         int repeats = 0;
         foreach (var command in commands)
         {
-            if (command is RepeatCommand repeat)
-            {
-                repeats += 1;
-                repeats += CountRepeatsRecursive(repeat.SubCommands);
-            }
+            if (command is not RepeatCommand repeat) continue;
+            repeats += 1;
+            repeats += CountRepeatsRecursive(repeat.SubCommands);
         }
         return repeats;
     }
