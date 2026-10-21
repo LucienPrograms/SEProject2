@@ -1,93 +1,89 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using SEProject2.Domain;
+﻿using SEProject2.Domain;
 
-namespace SEProject2.Models
+namespace SEProject2.Models;
+
+public class ProgramMetrics
 {
-    public class ProgramMetrics
+    public int CommandCount { get; private set; }
+    public int MaxNesting { get; private set; }
+    public int RepeatCount { get; private set; }
+
+    public void Analyze(UserProgram p)
     {
-        public int CommandCount { get; private set; }
-        public int MaxNesting { get; private set; }
-        public int RepeatCount { get; private set; }
-
-        public void Analyze(Program p)
+        if (p == null)
         {
-            if (p == null)
+            CommandCount = 0;
+            MaxNesting = 0;
+            RepeatCount = 0;
+            return;
+        }
+
+        CommandCount = CalculateCommandCount(p);
+        MaxNesting = CalculateMaxNesting(p);
+        RepeatCount = CalculateRepeatCount(p);
+
+        Console.WriteLine($"ICommand count: {CommandCount}");
+        Console.WriteLine($"Max nesting: {MaxNesting}");
+        Console.WriteLine($"Repeat count: {RepeatCount}");
+    }
+
+    private int CalculateCommandCount(UserProgram p)
+    {
+        return CountCommandsRecursive(p.Commands);
+    }
+
+    private int CalculateMaxNesting(UserProgram p)
+    {
+        return ComputeMaxNesting(p.Commands, 0);
+    }
+
+    private int CalculateRepeatCount(UserProgram p)
+    {
+        return CountRepeatsRecursive(p.Commands);
+    }
+
+    private static int CountCommandsRecursive(IEnumerable<ICommand> commands)
+    {
+        int total = 0;
+        foreach (var command in commands)
+        {
+            total += 1;
+            if (command is RepeatCommand repeat)
             {
-                CommandCount = 0;
-                MaxNesting = 0;
-                RepeatCount = 0;
-                return;
+                total += CountCommandsRecursive(repeat.SubCommands);
             }
-
-            CommandCount = CalculateCommandCount(p);
-            MaxNesting = CalculateMaxNesting(p);
-            RepeatCount = CalculateRepeatCount(p);
-
-            Console.WriteLine($"Command count: {CommandCount}");
-            Console.WriteLine($"Max nesting: {MaxNesting}");
-            Console.WriteLine($"Repeat count: {RepeatCount}");
         }
+        return total;
+    }
 
-        private int CalculateCommandCount(Program p)
+    private static int ComputeMaxNesting(IEnumerable<ICommand> commands, int currentDepth)
+    {
+        int maxDepth = currentDepth;
+        foreach (var command in commands)
         {
-            return CountCommandsRecursive(p.Commands);
-        }
-
-        private int CalculateMaxNesting(Program p)
-        {
-            return ComputeMaxNesting(p.Commands, 0);
-        }
-
-        private int CalculateRepeatCount(Program p)
-        {
-            return CountRepeatsRecursive(p.Commands);
-        }
-
-        private static int CountCommandsRecursive(IEnumerable<Command> commands)
-        {
-            int total = 0;
-            foreach (var command in commands)
+            if (command is RepeatCommand repeat)
             {
-                total += 1;
-                if (command is RepeatCommand repeat)
+                int childDepth = ComputeMaxNesting(repeat.SubCommands, currentDepth + 1);
+                if (childDepth > maxDepth)
                 {
-                    total += CountCommandsRecursive(repeat.Commands);
+                    maxDepth = childDepth;
                 }
             }
-            return total;
         }
+        return maxDepth;
+    }
 
-        private static int ComputeMaxNesting(IEnumerable<Command> commands, int currentDepth)
+    private static int CountRepeatsRecursive(IEnumerable<ICommand> commands)
+    {
+        int repeats = 0;
+        foreach (var command in commands)
         {
-            int maxDepth = currentDepth;
-            foreach (var command in commands)
+            if (command is RepeatCommand repeat)
             {
-                if (command is RepeatCommand repeat)
-                {
-                    int childDepth = ComputeMaxNesting(repeat.Commands, currentDepth + 1);
-                    if (childDepth > maxDepth)
-                    {
-                        maxDepth = childDepth;
-                    }
-                }
+                repeats += 1;
+                repeats += CountRepeatsRecursive(repeat.SubCommands);
             }
-            return maxDepth;
         }
-
-        private static int CountRepeatsRecursive(IEnumerable<Command> commands)
-        {
-            int repeats = 0;
-            foreach (var command in commands)
-            {
-                if (command is RepeatCommand repeat)
-                {
-                    repeats += 1;
-                    repeats += CountRepeatsRecursive(repeat.Commands);
-                }
-            }
-            return repeats;
-        }
+        return repeats;
     }
 }
