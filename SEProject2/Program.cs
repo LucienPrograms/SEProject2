@@ -1,4 +1,5 @@
-﻿using SEProject2.Domain;
+﻿using System.Reflection;
+using SEProject2.Domain;
 using SEProject2.Models;
 using SEProject2.Service;
 
@@ -8,44 +9,38 @@ internal static class Program
 {
     private static void Main(string[] args)
     {
-        string projectDirectory = Path.GetFullPath(
-        Path.Combine(AppContext.BaseDirectory, "..", "..", ".."));
-
-        string examplesDirectory = Path.Combine(projectDirectory, "examples");
-
-        // Find all text files in the examples directory.
-        string[] exampleFiles = Directory.Exists(examplesDirectory)
-            ? Directory.GetFiles(examplesDirectory, "*.txt")
-                .OrderBy(Path.GetFileName)
-                .ToArray()
-            : Array.Empty<string>();
-
         Console.WriteLine("Step 1: Load a program");
 
-        for (int i = 0; i < exampleFiles.Length; i++)
-        {
-            Console.WriteLine($"  {i + 1}) {Path.GetFileName(exampleFiles[i])}");
-        }
+        Console.WriteLine($"  1) Example 1");
+        Console.WriteLine($"  2) Example 2");
+        Console.WriteLine($"  3) Example 3");
+        Console.WriteLine($"  4) Import from another text file");
 
-        int importOption = exampleFiles.Length + 1;
-        Console.WriteLine($"  {importOption}) Import from another text file");
-
-        Console.Write($"Choose [1-{importOption}]: ");
+        Console.Write($"Choose [1-4]: ");
 
         string? choice = Console.ReadLine();
         UserProgram? prog = null;
 
         try
         {
-            if (int.TryParse(choice, out int selectedOption)
-                && selectedOption >= 1
-                && selectedOption <= exampleFiles.Length)
+            if (!int.TryParse(choice, out int choiceNumber))
             {
-                prog = ProgramImporter.ImportFromFile(
-                    exampleFiles[selectedOption - 1]);
+                Console.WriteLine("Invalid choice. Exiting.");
+                return;
             }
-            else if (int.TryParse(choice, out selectedOption)
-                && selectedOption == importOption)
+
+            if (choiceNumber == 1)
+            {
+                prog = UserProgram.Example1();
+            } else if (choiceNumber == 2)
+            { 
+                prog = UserProgram.Example2();
+            }
+            else if (choiceNumber == 3)
+            {
+                prog = UserProgram.Example3();
+            }
+            else if (choiceNumber == 4)
             {
                 Console.Write("Enter path to program text file: ");
                 string? filePath = Console.ReadLine();
@@ -55,7 +50,6 @@ internal static class Program
                     Console.WriteLine("No file path provided. Exiting.");
                     return;
                 }
-
                 prog = ProgramImporter.ImportFromFile(filePath);
             }
             else
