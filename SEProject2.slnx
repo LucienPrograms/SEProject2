@@ -1,3 +1,4 @@
 <Solution>
+  <Project Path="SEProject2.Tests/SEProject2.Tests.csproj" />
   <Project Path="SEProject2/SEProject2.csproj" />
 </Solution>

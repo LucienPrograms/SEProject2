@@ -34,7 +34,7 @@ namespace SEProject2.Models
         public ProgramMetrics CalculateMetrics()
         {
             var metrics = new ProgramMetrics();
-            metrics.Analyze(this);
+            //metrics.Analyze(this);
             return metrics;
         }
     
