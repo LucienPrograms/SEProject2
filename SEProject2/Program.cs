@@ -90,7 +90,6 @@ internal static class Program
             case "1":
                 prog.Execute();
                 break;
-
             case "2":
                 prog.CalculateMetrics();
                 break;
