@@ -23,4 +23,13 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="Examples\example1.txt" />
+    <EmbeddedResource Include="Examples\example1.txt" />
+    <None Remove="Examples\example2.txt" />
+    <EmbeddedResource Include="Examples\example2.txt" />
+    <None Remove="Examples\example3.txt" />
+    <EmbeddedResource Include="Examples\example3.txt" />
+  </ItemGroup>
+
 </Project>

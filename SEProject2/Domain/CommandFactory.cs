@@ -5,6 +5,7 @@ namespace SEProject2.Domain;
 
 public static class CommandFactory
 {
+    // Keywords
     private const string Move = "Move";
     private const string Turn = "Turn";
     private const string Repeat = "Repeat";
@@ -31,7 +32,7 @@ public static class CommandFactory
     }
     
     
-    private static ICommand ParseCommand(Queue<ParsedLine> lines, uint currentIndent)
+    private static ICommand ParseCommand(Queue<ParsedLine> lines)
     {
         var line = lines.Dequeue();
         switch (line.Parts[0])
@@ -41,17 +42,16 @@ public static class CommandFactory
             case Repeat:
             {
                 var times = uint.Parse(line.Parts[1]);
-                if (line.Parts[2] != Times) throw new Exception("Malformed syntax");
+                if (line.Parts[2] != Times)
+                    throw new Exception("Malformed syntax");
 
                 List<ICommand> subCommands = [];
-            
-                var next = lines.Peek();
-                while (next.Indent > currentIndent)
+
+                while (lines.Count > 0 && lines.Peek().Indent > line.Indent)
                 {
-                    subCommands.Add(ParseCommand(lines, currentIndent + 1));
-                
-                    next = lines.Peek();
+                    subCommands.Add(ParseCommand(lines));
                 }
+
                 return CreateRepeat(times, subCommands);
             }
             default: throw new Exception("Malformed syntax");
@@ -65,7 +65,7 @@ public static class CommandFactory
         
         while (queue.Count > 0)
         {
-            commands.Add(ParseCommand(queue, 0));
+            commands.Add(ParseCommand(queue));
         }
         
         return commands;

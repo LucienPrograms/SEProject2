@@ -1,67 +1,61 @@
-﻿using SEProject2.Domain;
-using SEProject2.Models;
+﻿using SEProject2.Models;
 using SEProject2.Service;
 
 namespace SEProject2;
 
 internal static class Program
 {
-    private static void Main(string[] args)
+    private static void Main()
     {
-        string projectDirectory = Path.GetFullPath(
-        Path.Combine(AppContext.BaseDirectory, "..", "..", ".."));
-
-        string examplesDirectory = Path.Combine(projectDirectory, "examples");
-
-        // Find all text files in the examples directory.
-        string[] exampleFiles = Directory.Exists(examplesDirectory)
-            ? Directory.GetFiles(examplesDirectory, "*.txt")
-                .OrderBy(Path.GetFileName)
-                .ToArray()
-            : Array.Empty<string>();
-
-        Console.WriteLine("Step 1: Load a program");
-
-        for (int i = 0; i < exampleFiles.Length; i++)
+        while (true)
         {
-            Console.WriteLine($"  {i + 1}) {Path.GetFileName(exampleFiles[i])}");
-        }
+            Console.WriteLine("Step 1: Load a program");
 
-        int importOption = exampleFiles.Length + 1;
-        Console.WriteLine($"  {importOption}) Import from another text file");
+        Console.WriteLine("  1) Example 1");
+        Console.WriteLine("  2) Example 2");
+        Console.WriteLine("  3) Example 3");
+        Console.WriteLine("  4) Import from another text file");
 
-        Console.Write($"Choose [1-{importOption}]: ");
+        Console.Write($"Choose [1-4]: ");
 
         string? choice = Console.ReadLine();
         UserProgram? prog = null;
 
         try
         {
-            if (int.TryParse(choice, out int selectedOption)
-                && selectedOption >= 1
-                && selectedOption <= exampleFiles.Length)
-            {
-                prog = ProgramImporter.ImportFromFile(
-                    exampleFiles[selectedOption - 1]);
-            }
-            else if (int.TryParse(choice, out selectedOption)
-                && selectedOption == importOption)
-            {
-                Console.Write("Enter path to program text file: ");
-                string? filePath = Console.ReadLine();
-
-                if (string.IsNullOrWhiteSpace(filePath))
-                {
-                    Console.WriteLine("No file path provided. Exiting.");
-                    return;
-                }
-
-                prog = ProgramImporter.ImportFromFile(filePath);
-            }
-            else
+            if (!int.TryParse(choice, out int choiceNumber))
             {
                 Console.WriteLine("Invalid choice. Exiting.");
                 return;
+            }
+
+            switch (choiceNumber)
+            {
+                case 1:
+                    prog = UserProgram.Example1();
+                    break;
+                case 2:
+                    prog = UserProgram.Example2();
+                    break;
+                case 3:
+                    prog = UserProgram.Example3();
+                    break;
+                case 4:
+                {
+                    Console.Write("Enter path to program text file: ");
+                    string? filePath = Console.ReadLine();
+
+                    if (string.IsNullOrWhiteSpace(filePath))
+                    {
+                        Console.WriteLine("No file path provided. Exiting.");
+                        return;
+                    }
+                    prog = ProgramImporter.ImportFromFile(filePath);
+                    break;
+                }
+                default:
+                    Console.WriteLine("Invalid choice. Exiting.");
+                    return;
             }
         }
         catch (Exception ex)
@@ -97,6 +91,7 @@ internal static class Program
             default:
                 Console.WriteLine("Invalid choice. Exiting.");
                 return;
+        }
         }
     }
 }

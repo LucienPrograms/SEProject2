@@ -2,7 +2,7 @@
 
 namespace SEProject2.Domain;
 
-public record RepeatCommand(uint amount, IReadOnlyList<ICommand> subCommands) : ICommand
+public class RepeatCommand(uint amount, IReadOnlyList<ICommand> subCommands) : ICommand
 {
     public IReadOnlyList<ICommand> SubCommands { get; } = subCommands;
     

@@ -2,7 +2,7 @@
 
 namespace SEProject2.Domain;
 
-public record MoveCommand(uint steps) : ICommand
+public class MoveCommand(uint steps) : ICommand
 {
     public void Execute(Character c) => c.MoveForward(steps);
 }

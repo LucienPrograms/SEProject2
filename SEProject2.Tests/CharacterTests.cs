@@ -1,9 +1,6 @@
 ﻿namespace SEProject2.Tests;
 
-using System.Globalization;
-using System.Runtime.Versioning;
 using SEProject2.Models;
-using SEProject2.Tests;
 
 public class CharacterTests
 {
