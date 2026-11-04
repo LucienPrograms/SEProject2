@@ -1,4 +1,32 @@
    classDiagram
+    class Form1 {
+        -ProgramService programService
+        -TextBox programEditor
+        -TextBox outputBox
+        -TextBox metricsBox
+        +Form1()
+        -BuildInterface(): void
+        -LoadFile(): void
+        -LoadBasic(): void
+        -LoadAdvanced(): void
+        -LoadExpert(): void
+        -RunProgram(): void
+        -ShowMetrics(): void
+    }
+
+    class ProgramService {
+        -UserProgram currentProgram
+        +LoadProgram(filePath: string): void
+        +LoadProgramFromText(name: string, text: string): void
+        +RunProgram(): ExecutionResult
+        +GetMetrics(): ProgramMetrics
+    }
+
+    class ExecutionResult{
+        +string Trace
+        +string FinalState
+    }
+
     class UserProgram {
         +string Name
         +List~ICommand~ Commands
@@ -96,7 +124,11 @@
         +Calculate(Program program) ProgramMetrics
     }
 
-
+    Form1 ..> ProgramService 
+    ProgramService ..> Userprogram
+    ProgramService ..> ProgramImporter
+    ProgramService ..> ExecutionResult
+    ProgramService ..> ProgramMetrics
     
     ProgramImporter ..> CommandFactory
     CommandFactory ..> ICommand
