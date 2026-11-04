@@ -1,6 +1,6 @@
 ﻿namespace SEProject2.Models;
 
-public class Character
+public class Luna
 {
     public int X { get; private set; }
 
@@ -10,7 +10,7 @@ public class Character
 
     private readonly List<string> _executedCommandTrace = [];
 
-    public Character() => ResetToStart();
+    public Luna() => ResetToStart();
 
     public void ResetToStart()
     {

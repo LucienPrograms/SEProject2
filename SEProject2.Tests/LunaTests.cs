@@ -8,7 +8,7 @@ public class CharacterTests
     public void StartingDirectionTest()
     {
         // Arrange
-        Character Luna = new Character();
+        Luna Luna = new Luna();
             
         // Act
         Direction.Heading heading = Luna.Facing;
@@ -21,7 +21,7 @@ public class CharacterTests
     public void StartingLocationTest()
     {
         // Arrange
-        Character Luna = new Character();
+        Luna Luna = new Luna();
 
         // Act
         (int, int) location = (Luna.X, Luna.Y);
@@ -37,7 +37,7 @@ public class CharacterTests
     public void MoveStepsTest(uint steps, int expected_x, int expected_y)
     {
         // Arrange
-        Character Luna = new Character();
+        Luna Luna = new Luna();
         (int, int) expected = (expected_x, expected_y);
 
         // Act
@@ -60,7 +60,7 @@ public class CharacterTests
     public void TurnCharacterTest(Direction.LeftRight turnDirection, int count, Direction.Heading expected)
     {
         // Arrange
-        Character Luna = new Character();
+        Luna Luna = new Luna();
 
         // Act
         for (int i = 0; i < count; i++)
@@ -76,7 +76,7 @@ public class CharacterTests
     public void ResetCharacterToStartTest()
     {
         // Arrange
-        Character Luna = new Character();
+        Luna Luna = new Luna();
     
         // Act
         Luna.MoveForward(4);

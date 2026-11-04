@@ -4,5 +4,5 @@ namespace SEProject2.Domain;
 
 public class MoveCommand(uint steps) : ICommand
 {
-    public void Execute(Character c) => c.MoveForward(steps);
+    public void Execute(Luna c) => c.MoveForward(steps);
 }
