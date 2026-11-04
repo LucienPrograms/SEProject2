@@ -13,12 +13,23 @@ public static class CommandFactory
     private const string Left = "left";
     private const string Times = "times";
 
+    /// <summary>
+    /// Creates move command.
+    /// </summary>
+    /// <param name="line">Command line.</param>
+    /// <returns>New move command.</returns>
     private static MoveCommand ParseMoveCommand(ParsedLine line)
     {
         var steps = uint.Parse(line.Parts[1]);
         return CreateMove(steps);
     }
 
+    /// <summary>
+    /// Creates turn command.
+    /// </summary>
+    /// <param name="line">Command line.</param>
+    /// <returns>New turn command.</returns>
+    /// <exception cref="Exception">Direction to turn is invalid. Must be 'Right' or 'Left'.</exception>
     private static TurnCommand ParseTurnCommand(ParsedLine line)
     {
         Direction.LeftRight direction = line.Parts[1] switch
@@ -31,7 +42,12 @@ public static class CommandFactory
         return CreateTurn(direction);
     }
     
-    
+    /// <summary>
+    /// Parses a command line and creates the respective command.
+    /// </summary>
+    /// <param name="lines"></param>
+    /// <returns>New ICommand command.</returns>
+    /// <exception cref="Exception">Command syntax is invalid or could not be parsed.</exception>
     private static ICommand ParseCommand(Queue<ParsedLine> lines)
     {
         var line = lines.Dequeue();
@@ -58,6 +74,11 @@ public static class CommandFactory
         }
     }
 
+    /// <summary>
+    /// Parses through all command lines to create an ordered list of ICommands.
+    /// </summary>
+    /// <param name="lines">Command lines to parse.</param>
+    /// <returns>List of ICommand commands.</returns>
     public static List<ICommand> FromLines(IReadOnlyList<ParsedLine> lines)
     {
         var commands = new List<ICommand>();

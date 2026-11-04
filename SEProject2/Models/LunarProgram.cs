@@ -9,6 +9,9 @@ public class LunarProgram(string name, List<ICommand> commands)
     public List<ICommand> Commands { get; set; } = commands;
     private Luna Character { get; set; } = new();
 
+    /// <summary>
+    /// Runs the LunarProgram by executing the stored list of commands in order.
+    /// </summary>
     public void Execute()
     {
         Character.ResetToStart();  // Always reset to start before executing
@@ -22,6 +25,10 @@ public class LunarProgram(string name, List<ICommand> commands)
         Console.WriteLine($"End state {Character.GetState()}.");
     }
 
+    /// <summary>
+    /// Analyses the program in regards to various predetermind metrics.
+    /// </summary>
+    /// <returns>A new object of ProgramMetrics.</returns>
     public ProgramMetrics CalculateMetrics()
     {
         var metrics = new ProgramMetrics();
