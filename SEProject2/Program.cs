@@ -85,7 +85,9 @@ internal static class Program
                 prog.Execute();
                 break;
             case "2":
-                prog.CalculateMetrics();
+                Console.WriteLine($"Command count: {prog.CountCommands()}");
+                Console.WriteLine($"Max nesting: {prog.MaxNesting()}");
+                Console.WriteLine($"Repeat count: {prog.CountRepeats()}");
                 break;
 
             default:
