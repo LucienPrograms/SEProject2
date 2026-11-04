@@ -23,6 +23,9 @@ public class Luna
         _executedCommandTrace.Clear();
     }
 
+    public bool IsWallAhead() => throw new NotImplementedException();
+    public bool IsGridEdge() => throw new NotImplementedException();
+
     /// <summary>
     /// Moves Luna in the direction she is facing.
     /// </summary>
@@ -32,8 +35,8 @@ public class Luna
         var (dx, dy) = Direction.Step[Facing];
         for (int i = 0; i < steps; i++)
         {
-            X = X + dx;
-            Y = Y + dy;
+            X += dx;
+            Y += dy;
         }
         _executedCommandTrace.Add($"Move {steps}");
     }
