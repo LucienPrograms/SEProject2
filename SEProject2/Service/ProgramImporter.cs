@@ -4,7 +4,7 @@ namespace SEProject2.Service;
 
 public static class ProgramImporter
 {
-    public static Models.UserProgram ImportFromFile(string filePath)
+    public static Models.LunarProgram ImportFromFile(string filePath)
     {
         if (string.IsNullOrWhiteSpace(filePath))
         {
@@ -18,7 +18,7 @@ public static class ProgramImporter
     
         string[] lines = File.ReadAllLines(filePath);
     
-        return new Models.UserProgram(
+        return new Models.LunarProgram(
     
             Path.GetFileNameWithoutExtension(filePath), CommandFactory.FromLines(LineParser.ParseBlock(lines))
         );

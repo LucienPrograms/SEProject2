@@ -30,9 +30,9 @@ public static class Direction
     };
     public static readonly Dictionary<Heading, (int, int)> Step = new()
     {
-        {Heading.North, (0, 1)},
+        {Heading.North, (0, -1)},
         {Heading.East, (1, 0)},
-        {Heading.South, (0, -1)},
+        {Heading.South, (0, 1)},
         {Heading.West, (-1, 0)}
     };
 }

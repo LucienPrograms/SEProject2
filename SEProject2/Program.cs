@@ -19,7 +19,7 @@ internal static class Program
         Console.Write($"Choose [1-4]: ");
 
         string? choice = Console.ReadLine();
-        UserProgram? prog = null;
+        LunarProgram? prog = null;
 
         try
         {
@@ -32,13 +32,13 @@ internal static class Program
             switch (choiceNumber)
             {
                 case 1:
-                    prog = UserProgram.Example1();
+                    prog = LunarProgram.Example1();
                     break;
                 case 2:
-                    prog = UserProgram.Example2();
+                    prog = LunarProgram.Example2();
                     break;
                 case 3:
-                    prog = UserProgram.Example3();
+                    prog = LunarProgram.Example3();
                     break;
                 case 4:
                 {

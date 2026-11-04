@@ -6,7 +6,7 @@ public class RepeatCommand(uint amount, IReadOnlyList<ICommand> subCommands) : I
 {
     public IReadOnlyList<ICommand> SubCommands { get; } = subCommands;
     
-    public void Execute(Character c)
+    public void Execute(Luna c)
     {
         for (uint i = 0; i < amount; i++)
         {

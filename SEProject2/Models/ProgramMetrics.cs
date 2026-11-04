@@ -8,7 +8,7 @@ public class ProgramMetrics
     public int MaxNesting { get; private set; }
     public int RepeatCount { get; private set; }
 
-    public void Analyze(UserProgram p)
+    public void Analyze(LunarProgram p)
     {
         if (p == null)
         {
@@ -27,11 +27,11 @@ public class ProgramMetrics
         Console.WriteLine($"Repeat count: {RepeatCount}");
     }
 
-    private static int CalculateCommandCount(UserProgram p) => CountCommandsRecursive(p.Commands);
+    private static int CalculateCommandCount(LunarProgram p) => CountCommandsRecursive(p.Commands);
 
-    private static int CalculateMaxNesting(UserProgram p) => ComputeMaxNesting(p.Commands, 0);
+    private static int CalculateMaxNesting(LunarProgram p) => ComputeMaxNesting(p.Commands, 0);
 
-    private static int CalculateRepeatCount(UserProgram p) => CountRepeatsRecursive(p.Commands);
+    private static int CalculateRepeatCount(LunarProgram p) => CountRepeatsRecursive(p.Commands);
 
     private static int CountCommandsRecursive(IEnumerable<ICommand> commands)
     {
