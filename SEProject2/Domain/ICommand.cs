@@ -4,5 +4,5 @@ namespace SEProject2.Domain;
 
 public interface ICommand
 {
-    public void Execute(Character c);
+    public void Execute(Luna c);
 }
