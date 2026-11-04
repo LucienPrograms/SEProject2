@@ -1,4 +1,5 @@
 <Solution>
+  <Project Path="SEProject.UI/SEProject2.UI.csproj" Id="7b26fa1b-8827-485a-8e89-f3f584af1d03" />
   <Project Path="SEProject2.Tests/SEProject2.Tests.csproj" />
   <Project Path="SEProject2/SEProject2.csproj" />
 </Solution>

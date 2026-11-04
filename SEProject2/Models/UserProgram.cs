@@ -7,7 +7,7 @@ public class UserProgram(string name, List<ICommand> commands)
 {
     public string Name { get; set; } = name;
     public List<ICommand> Commands { get; set; } = commands;
-    private Character Character { get; set; } = new();
+    public Character Character { get; set; } = new();
 
     public void Execute()
     {
