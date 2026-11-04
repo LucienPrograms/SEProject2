@@ -12,6 +12,9 @@ public class Luna
 
     public Luna() => ResetToStart();
 
+    /// <summary>
+    /// (Re)sets Luna to starting position and direction. (0, 0) facing East.
+    /// </summary>
     public void ResetToStart()
     {
         X = 0;
@@ -20,6 +23,10 @@ public class Luna
         _executedCommandTrace.Clear();
     }
 
+    /// <summary>
+    /// Moves Luna in the direction she is facing.
+    /// </summary>
+    /// <param name="steps">How many steps Luna is taking.</param>
     public void MoveForward(uint steps)
     {
         var (dx, dy) = Direction.Step[Facing];
@@ -31,6 +38,10 @@ public class Luna
         _executedCommandTrace.Add($"Move {steps}");
     }
 
+    /// <summary>
+    /// Changes the direction Luna is facing by 90° either to the right (clockwise) or to the left (counterclockwise).
+    /// </summary>
+    /// <param name="direction">Direction in which to turn.</param>
     public void Turn(Direction.LeftRight direction)
     {
         if (direction == Direction.LeftRight.Left)
@@ -42,9 +53,13 @@ public class Luna
         {
             Facing = Direction.Right[Facing];
             _executedCommandTrace.Add("Turn right");
-        }   
+        }  
     }
 
+    /// <summary>
+    /// Retrieves the current position and direction of Luna.
+    /// </summary>
+    /// <returns>string with location (X, Y) and the direction Luna is facing (Direction.Heading).</returns>
     public string GetState() => $"({X}, {Y}) facing {Facing.ToString().ToLower()}";
 
     public IReadOnlyList<string> GetTraceEntries() => _executedCommandTrace.AsReadOnly();
