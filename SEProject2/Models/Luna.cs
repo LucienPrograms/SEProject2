@@ -10,6 +10,8 @@ public class Luna
 
     private readonly List<string> _executedCommandTrace = [];
 
+    private readonly List<(int X, int Y)> _path = new();
+
     public Luna() => ResetToStart();
 
     /// <summary>
@@ -20,7 +22,12 @@ public class Luna
         X = 0;
         Y = 0;
         Facing = Direction.Heading.East;
+
         _executedCommandTrace.Clear();
+
+        _path.Clear();
+        _path.Add((X, Y));
+
     }
 
     public bool IsWallAhead() => throw new NotImplementedException();
@@ -33,11 +40,16 @@ public class Luna
     public void MoveForward(uint steps)
     {
         var (dx, dy) = Direction.Step[Facing];
-        for (int i = 0; i < steps; i++)
+        for (uint i = 0; i < steps; i++)
         {
             X += dx;
             Y += dy;
+
+            //Record every position visited
+            _path.Add((X, Y));
         }
+
+
         _executedCommandTrace.Add($"Move {steps}");
     }
 
@@ -66,4 +78,6 @@ public class Luna
     public string GetState() => $"({X}, {Y}) facing {Facing.ToString().ToLower()}";
 
     public IReadOnlyList<string> GetTraceEntries() => _executedCommandTrace.AsReadOnly();
+
+    public IReadOnlyList<(int X, int Y)> GetPath() => _path.AsReadOnly();
 }

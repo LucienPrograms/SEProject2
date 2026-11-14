@@ -7,7 +7,7 @@ public class LunarProgram(string name, List<ICommand> commands)
 {
     public string Name { get; set; } = name;
     public List<ICommand> Commands { get; set; } = commands;
-    private Luna Character { get; set; } = new();
+    public Luna Character { get; private set; } = new();
 
     /// <summary>
     /// Runs the LunarProgram by executing the stored list of commands in order.
@@ -15,14 +15,11 @@ public class LunarProgram(string name, List<ICommand> commands)
     public void Execute()
     {
         Character.ResetToStart();  // Always reset to start before executing
+
         foreach (ICommand command in Commands)
         {
             command.Execute(Character);
         }
-
-        string commandTrace = string.Join(", ", Character.GetTraceEntries()) + ".";
-        Console.WriteLine(commandTrace);
-        Console.WriteLine($"End state {Character.GetState()}.");
     }
 
     /// <summary>

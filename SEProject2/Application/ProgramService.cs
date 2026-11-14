@@ -9,7 +9,7 @@ namespace SEProject2.Application;
 
 public class ProgramService
 {
-    private UserProgram? currentProgram;
+    private LunarProgram? currentProgram;
 
     public void LoadProgram(string filePath)
     {
@@ -23,31 +23,41 @@ public class ProgramService
 
         var commands = CommandFactory.FromLines(parsedLines);
 
-        currentProgram = new UserProgram(name, commands);
+        currentProgram = new LunarProgram(name, commands);
     }
 
     public ExecutionResult RunProgram()
     {
+
         if (currentProgram == null)
         {
             throw new InvalidOperationException("No program loaded.");
         }
+
         currentProgram.Execute();
 
         return new ExecutionResult
         {
             Trace = string.Join(", ", currentProgram.Character.GetTraceEntries()), 
-            FinalState = currentProgram.Character.GetState()
+            FinalState = currentProgram.Character.GetState(),
+            Path = currentProgram.Character.GetPath()
         };
     }
 
-    public ProgramMetrics GetMetrics()
+    public (int CommandCount, int MaxNestingDepth, int RepeatCount) GetMetrics()
     {
         if (currentProgram == null)
         {
             throw new InvalidOperationException("No program loaded.");
         }
-        return currentProgram.CalculateMetrics();
+
+        return (
+            currentProgram.CountCommands(),
+            currentProgram.MaxNesting(),
+            currentProgram.CountRepeats()
+        );
+
+
     }
 
 }

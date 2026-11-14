@@ -25,11 +25,17 @@
 
   <ItemGroup>
     <None Remove="Examples\example1.txt" />
-    <EmbeddedResource Include="Examples\example1.txt" />
+    <EmbeddedResource Include="Examples\example1.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
     <None Remove="Examples\example2.txt" />
-    <EmbeddedResource Include="Examples\example2.txt" />
+    <EmbeddedResource Include="Examples\example2.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
     <None Remove="Examples\example3.txt" />
-    <EmbeddedResource Include="Examples\example3.txt" />
+    <EmbeddedResource Include="Examples\example3.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
   </ItemGroup>
 
 </Project>
