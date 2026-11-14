@@ -1,6 +1,6 @@
 ﻿namespace SEProject2.Models;
 
-public class Character
+public class Luna
 {
     public int X { get; private set; }
 
@@ -10,8 +10,11 @@ public class Character
 
     private readonly List<string> _executedCommandTrace = [];
 
-    public Character() => ResetToStart();
+    public Luna() => ResetToStart();
 
+    /// <summary>
+    /// (Re)sets Luna to starting position and direction. (0, 0) facing East.
+    /// </summary>
     public void ResetToStart()
     {
         X = 0;
@@ -20,17 +23,28 @@ public class Character
         _executedCommandTrace.Clear();
     }
 
+    public bool IsWallAhead() => throw new NotImplementedException();
+    public bool IsGridEdge() => throw new NotImplementedException();
+
+    /// <summary>
+    /// Moves Luna in the direction she is facing.
+    /// </summary>
+    /// <param name="steps">How many steps Luna is taking.</param>
     public void MoveForward(uint steps)
     {
         var (dx, dy) = Direction.Step[Facing];
         for (int i = 0; i < steps; i++)
         {
-            X = X + dx;
-            Y = Y + dy;
+            X += dx;
+            Y += dy;
         }
         _executedCommandTrace.Add($"Move {steps}");
     }
 
+    /// <summary>
+    /// Changes the direction Luna is facing by 90° either to the right (clockwise) or to the left (counterclockwise).
+    /// </summary>
+    /// <param name="direction">Direction in which to turn.</param>
     public void Turn(Direction.LeftRight direction)
     {
         if (direction == Direction.LeftRight.Left)
@@ -42,9 +56,13 @@ public class Character
         {
             Facing = Direction.Right[Facing];
             _executedCommandTrace.Add("Turn right");
-        }   
+        }  
     }
 
+    /// <summary>
+    /// Retrieves the current position and direction of Luna.
+    /// </summary>
+    /// <returns>string with location (X, Y) and the direction Luna is facing (Direction.Heading).</returns>
     public string GetState() => $"({X}, {Y}) facing {Facing.ToString().ToLower()}";
 
     public IReadOnlyList<string> GetTraceEntries() => _executedCommandTrace.AsReadOnly();

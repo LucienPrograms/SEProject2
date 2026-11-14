@@ -1,38 +1,38 @@
    classDiagram
-    %% class Form1 {
-    %%     -ProgramService programService
-    %%     -TextBox programEditor
-    %%     -TextBox outputBox
-    %%     -TextBox metricsBox
-    %%     +Form1()
-    %%     -BuildInterface(): void
-    %%     -LoadFile(): void
-    %%     -LoadBasic(): void
-    %%     -LoadAdvanced(): void
-    %%     -LoadExpert(): void
-    %%     -RunProgram(): void
-    %%     -ShowMetrics(): void
-    %% }
+    class Form1 {
+        -ProgramService programService
+        -TextBox programEditor
+        -TextBox outputBox
+        -TextBox metricsBox
+        +Form1()
+        -BuildInterface(): void
+        -LoadFile(): void
+        -LoadBasic(): void
+        -LoadAdvanced(): void
+        -LoadExpert(): void
+        -RunProgram(): void
+        -ShowMetrics(): void
+    }
 
-    %% class ProgramService {
-    %%     -LunarProgram currentProgram
-    %%     +LoadProgram(filePath: string): void
-    %%     +LoadProgramFromText(name: string, text: string): void
-    %%     +RunProgram(): ExecutionResult
-    %%     +GetMetrics(): ProgramMetrics
-    %% }
+    class ProgramService {
+        -UserProgram currentProgram
+        +LoadProgram(filePath: string): void
+        +LoadProgramFromText(name: string, text: string): void
+        +RunProgram(): ExecutionResult
+        +GetMetrics(): ProgramMetrics
+    }
 
-    %% class ExecutionResult{
-    %%     +string Trace
-    %%     +string FinalState
-    %% }
+    class ExecutionResult{
+        +string Trace
+        +string FinalState
+    }
 
-    class LunarProgram {
+    class UserProgram {
         +string Name
         +List~ICommand~ Commands
-        +Luna L
+        +Character Character
         +Execute(): void
-        %% +CalculateMetrics(): ProgramMetrics
+        +CalculateMetrics(): ProgramMetrics
     }
 
     class CommandFactory {
@@ -49,33 +49,30 @@
         -ParseCommand(lines:Queue~ParsedLine~, currentIndent:int): ICommand
         
         +FromLines(lines: IReadOnlyList~ParsedLine~) List~ICommand~
+        +CreateMove(steps: uint) MoveCommand
+        +CreateTurn(direction: Direction.LeftRight) TurnCommand
+        +CreateRepeat(amount: uint, subCommands: IReadOnlyList~ICommand~) RepeatCommand
     }
 
     class ICommand {
         <<interface>> 
-        +Execute(Luna L): void
+        +Execute(c: Character): void
     }
 
     class MoveCommand{
         +uint Steps
-        +Execute(Luna L): void
+        +Execute(Character c): void
     }
 
     class TurnCommand{
         +Direction.LeftRight direction
-        +Execute(Luna L): void
+        +Execute(Character c): void
     }
 
     class RepeatCommand{
         +uint Amount
         +IReadOnlyList~ICommand~ subCommands
-        +Execute(Luna L): void
-    }
-
-    class RepeatUntilCommand {
-        +RepeatCondition condition
-        +IReadOnlyList<ICommand> subCommands
-        +Execute (Luna L): void
+        +Execute(Character c): void
     }
 
     class Direction {
@@ -92,7 +89,7 @@
         + Step: Dictionary ~Heading, (int, int)~
     }
 
-    class Luna{
+    class Character {
         +int X
         +int Y
         +Direction.Heading Facing
@@ -119,32 +116,30 @@
         +string[] Parts
     }
 
-    %% class ProgramMetrics {
-    %%     +int CommandCount
-    %%     +int MaxNestingLevel
-    %%     +int RepeatCount
-    %%     +Analyze(UserProgram program): void
-    %%     +Calculate(Program program) ProgramMetrics
-    %% }
+    class ProgramMetrics {
+        +int CommandCount
+        +int MaxNestingLevel
+        +int RepeatCount
+        +Analyze(UserProgram program): void
+        +Calculate(Program program) ProgramMetrics
+    }
 
-    %% Form1 ..> ProgramService 
-    %% ProgramService ..> Lunarprogram
-    %% ProgramService ..> ProgramImporter
-    %% ProgramService ..> ExecutionResult
-    %% ProgramService ..> ProgramMetrics
+    Form1 ..> ProgramService 
+    ProgramService ..> Userprogram
+    ProgramService ..> ProgramImporter
+    ProgramService ..> ExecutionResult
+    ProgramService ..> ProgramMetrics
     
     ProgramImporter ..> CommandFactory
     CommandFactory ..> ICommand
     CommandFactory <.. ParsedLine
-    LunarProgram "1" *-- "0..*" ICommand 
-    LunarProgram "1" *-- "1" Luna
+    UserProgram "1" *-- "0..*" ICommand 
+    UserProgram "1" *-- "1" Character
     ICommand <|.. MoveCommand
     ICommand <|.. TurnCommand
     ICommand <|.. RepeatCommand
-    ICommand <|.. RepeatUntilCommand
     RepeatCommand "1" *-- "0..*" ICommand
-    RepeatUntilCommand "1" *-- "0..*" ICommand
     ProgramImporter ..> LineParser 
-    ProgramImporter ..> LunarProgram 
+    ProgramImporter ..> UserProgram 
     LineParser ..> ParsedLine 
-    %% ProgramMetrics --> LunarProgram 
+    ProgramMetrics --> UserProgram 
