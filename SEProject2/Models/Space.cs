@@ -19,10 +19,11 @@ class Space
         ParseGrid(lines);
     }
 
-    public Collision (int x, int y)
+    public bool Collision (int x, int y)
     {
         if (x < 0 || x > Height || y < 0 || y > Width) throw new Exception("Out of Bounds Exception");
-        if 
+        if (AsteroidField[x][y] == States.Blocked) throw new Exception("Blocked ");
+        return false;
     }
 
     private States[] ParseGrid(string[] lines)
