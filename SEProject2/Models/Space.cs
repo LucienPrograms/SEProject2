@@ -22,8 +22,11 @@ public class Space
 
     public void Collision (int x, int y)
     {
-        if (x < 0 || x > Height || y < 0 || y > Width) throw new Exception("Out of Bounds Exception");
-        if (AsteroidField[x][y] == States.Blocked) throw new Exception("Blocked ");
+        if (x < 0 || x >= Height || y < 0 || y >= Width) 
+            throw new OutOfBoundsException($" Position ({x}, {y}) is outside the grid.");
+        if (AsteroidField[x][y] == States.Blocked) 
+                throw new BlockedLocationException($" Position ({x}, {y}) is blocked.");
+        return false;
     }
 
     private void ParseGrid(string[] lines)
