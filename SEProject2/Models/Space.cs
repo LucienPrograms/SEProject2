@@ -1,6 +1,6 @@
 namespace SEProject2.Models;
 
-class Space
+public class Space
 {
     int Height { get; }
     int Width { get; }
@@ -8,7 +8,7 @@ class Space
 
     static enum States { Blocked, Open, End }
 
-    public Grid(string input)
+    public Space(string input)
     {
         string[] lines = input.Split("\n");
 
@@ -21,8 +21,10 @@ class Space
 
     public bool Collision (int x, int y)
     {
-        if (x < 0 || x > Height || y < 0 || y > Width) throw new Exception("Out of Bounds Exception");
-        if (AsteroidField[x][y] == States.Blocked) throw new Exception("Blocked ");
+        if (x < 0 || x >= Height || y < 0 || y >= Width) 
+            throw new OutOfBoundsException($" Position ({x}, {y}) is outside the grid.");
+        if (AsteroidField[x][y] == States.Blocked) 
+                throw new BlockedLocationException($" Position ({x}, {y}) is blocked.");
         return false;
     }
 
@@ -42,7 +44,7 @@ class Space
         States[] ParsedLine = new States[line.Length];
         foreach (char character in line)
         {
-            ParsedLine[column] = ConvertToState(character);
+            ParsedLine[column] = (States)ConvertToState(character);
             column++;
         }
         return ParsedLine;
