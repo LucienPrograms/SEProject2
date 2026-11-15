@@ -3,12 +3,10 @@
 public class Luna
 {
     public int X { get; private set; }
-
     public int Y { get; private set; }
-
     public Direction.Heading Facing { get; private set; }
-
     private readonly List<string> _executedCommandTrace = [];
+    private Space AsteroidField { get; set; };
 
     public Luna() => ResetToStart();
 
@@ -33,6 +31,9 @@ public class Luna
     public void MoveForward(uint steps)
     {
         var (dx, dy) = Direction.Step[Facing];
+
+        if (Collision)
+
         for (int i = 0; i < steps; i++)
         {
             X += dx;

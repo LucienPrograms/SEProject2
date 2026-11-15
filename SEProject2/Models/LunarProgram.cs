@@ -3,11 +3,12 @@ using SEProject2.Service;
 
 namespace SEProject2.Models;
 
-public class LunarProgram(string name, List<ICommand> commands)
+public class LunarProgram(string name, List<ICommand> commands, string asteroidField)
 {
     public string Name { get; set; } = name;
     public List<ICommand> Commands { get; set; } = commands;
     private Luna Character { get; set; } = new();
+    private Space AsteroidField { get; set; } = new Space(asteroidField);
 
     /// <summary>
     /// Runs the LunarProgram by executing the stored list of commands in order.
