@@ -6,11 +6,30 @@ public class Luna
     public int Y { get; private set; }
     public Direction.Heading Facing { get; private set; }
     private readonly List<string> _executedCommandTrace = [];
-    private Space AsteroidField { get; set; } = new Space("");
+    public Space AsteroidField { get; set; } = new Space("");
 
     private readonly List<(int X, int Y)> _path = new();
 
-    public Luna() => ResetToStart();
+    /// <summary>
+    /// Creates Luna without a loaded asteroid field. 
+    /// </summary>
+    public Luna()
+    {
+        AsteroidField = new Space("");
+        ResetToStart();
+    }
+
+    /// <summary>
+    /// Creates Luna with the supplied asteroid field. 
+    /// </summary>
+    /// <param name="asteroidField">The grid used for collision detection</param> 
+    public Luna(Space asteroidField)
+    {
+        AsteroidField = asteroidField;
+        ResetToStart();
+    }
+
+
 
     /// <summary>
     /// (Re)sets Luna to starting position and direction. (0, 0) facing East.

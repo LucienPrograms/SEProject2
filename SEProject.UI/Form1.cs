@@ -11,8 +11,12 @@ namespace SEProject2.UI
         private readonly TextBox outputBox = new();
         private readonly TextBox metricsBox = new();
         private readonly Panel pathPanel = new();
+        private string[] currentGrid = Array.Empty<string>();
         private IReadOnlyList<(int X, int Y)> currentPath = Array.Empty<(int X, int Y)>();
 
+        /// <summary>
+        /// Initializes the main application window and builds the user interface
+        /// </summary>
 
         public Form1()
         {
@@ -25,6 +29,10 @@ namespace SEProject2.UI
 
             BuildInterface();
         }
+
+        /// <summary>
+        /// Builds and arranges all controls in the main application window
+        /// </summary>
 
         private void BuildInterface()
         {
@@ -56,6 +64,7 @@ namespace SEProject2.UI
             buttonPanel.Controls.Add(CreateButton("Expert", LoadExpert));
             buttonPanel.Controls.Add(CreateButton("Run", RunProgram));
             buttonPanel.Controls.Add(CreateButton("Metrics", ShowMetrics));
+            buttonPanel.Controls.Add(CreateButton("Load grid", LoadGrid));
 
             mainLayout.Controls.Add(buttonPanel, 0, 0);
             mainLayout.SetColumnSpan(buttonPanel, 2);
@@ -122,7 +131,12 @@ namespace SEProject2.UI
             mainLayout.Controls.Add(pathGroup, 1, 2);
         }
 
-
+        /// <summary>
+        /// Creates a button and connects it to a specified action.
+        /// </summary>
+        /// <param name="text"> The text displayed on the button </param>
+        /// <param name="action"> The action executed when the button is called </param>
+        /// <returns> The created button </returns>
 
         private Button CreateButton(string text, Action action)
         {
@@ -138,6 +152,73 @@ namespace SEProject2.UI
 
             return button;
         }
+
+        /// <summary>
+        /// Loads grid text into the program service and prepares it for display.
+        /// This method can also be used by GUI tests without opening a file dialog.
+        /// </summary>
+        /// <param name="gridText"> The text represention of the grid </param>
+
+        public void LoadGridText(string gridText)
+        {
+            if (string.IsNullOrWhiteSpace(gridText))
+            {
+                throw new ArgumentException("Grid cannot be empty.", nameof (gridText));
+            }
+
+            string normalizedGrid = gridText.Replace("\r\n", "\n").Replace('\r', '\n').Trim('\n');
+
+            string[] lines = normalizedGrid.Split('\n');
+
+            if (lines.Any(string.IsNullOrWhiteSpace))
+            {
+                throw new ArgumentException("Grid cannot contain empty rows.", nameof(gridText));
+            }
+
+            programService.LoadGridFromText(normalizedGrid);
+
+            currentGrid = lines;
+            currentPath = Array.Empty<(int X, int Y)>();
+
+            outputBox.Clear();
+            metricsBox.Clear();
+
+            pathPanel.Invalidate();
+        }
+
+
+        /// <summary>
+        /// Opens a text file, loads its grid into the program service,
+        /// and refreshes the grid displayed in the GUI.
+        /// </summary>
+
+        private void LoadGrid()
+        {
+            using var dialog = new OpenFileDialog
+            {
+                Filter = "Text Files (*.txt)|*.txt|All Files(*.*)|*.*",
+                Title = "Select a grid file"
+            };
+
+            if (dialog.ShowDialog() != DialogResult.OK)
+                return;
+
+            try
+            {
+                string gridText = File.ReadAllText(dialog.FileName);
+                LoadGridText(gridText);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Grid load error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+
+            }
+        }
+
+        /// <summary>
+        /// Opens a file dialog and loads the selected program into the editor
+        /// </summary>
 
         private void LoadFile()
         {
@@ -159,6 +240,11 @@ namespace SEProject2.UI
             pathPanel.Invalidate();
         }
 
+        /// <summary>
+        /// Loads an example program from the Programs directory
+        /// </summary>
+        /// <param name="filename"> The name of the example program file </param>
+
         private void LoadExample (string filename)
         {
             string filePath = Path.Combine(AppContext.BaseDirectory, "Programs",filename);
@@ -179,20 +265,36 @@ namespace SEProject2.UI
 
         }
 
+        /// <summary>
+        /// Loads the basic example program
+        /// </summary>
         private void LoadBasic()
         {
             LoadExample("example1.txt");
         }
+
+        /// <summary>
+        /// Loads the advanced example program
+        /// </summary>
 
         private void LoadAdvanced()
         {
             LoadExample("example2.txt");
         }
 
+        /// <summary>
+        /// Loads the expert example program
+        /// </summary>
+
         private void LoadExpert()
         {
             LoadExample("example3.txt");
         }
+
+        /// <summary>
+        /// Executes the program currently written in the editor.
+        /// Displays the execution trace, final path and character path.
+        /// </summary>
 
         private void RunProgram()
         {
@@ -214,6 +316,10 @@ namespace SEProject2.UI
             }
         }
 
+        /// <summary>
+        /// Calculates and displays the command count, maximum nesting depth 
+        /// and repeat count of the current program 
+        /// </summary>
         private void ShowMetrics()
         {
             try
@@ -230,32 +336,64 @@ namespace SEProject2.UI
             }
         }
 
+
+        /// <summary>
+        /// Draws the loaded asteroid field and the character's path. 
+        /// Blocked cells are grey, open cells are white and the goal is green.
+        /// The character's starting position is shown in blue and the final
+        /// position is shown in red. 
+        /// </summary>
+        /// <param name="sender"> The control of that raised the paint event </param>
+        /// <param name="e"> The paint event arguments </param>
         private void DrawPath(object? sender, PaintEventArgs e)
         {
+            Graphics graphics = e.Graphics;
+
+            if (currentGrid.Length == 0)
+                return;
+
+            int rows = currentGrid.Length;
+            int columns = currentGrid[0].Length;
+            
+            int cellSize = Math.Max(1, Math.Min(pathPanel.Width / columns, pathPanel.Height / rows));
+
+            int gridWidth = cellSize * columns;
+            int gridHeight = cellSize * rows;
+
+            int offsetX = (pathPanel.Width - gridWidth) / 2;
+            int offsetY = (pathPanel.Height - gridHeight) / 2;
+
+            using Pen gridPen = new(Color.Black, 1);
+            using Brush openBrush = new SolidBrush(Color.White);
+            using Brush blockedBrush = new SolidBrush(Color.Gray);
+            using Brush goalBrush = new SolidBrush(Color.LightGreen);
+
+            //Draw the grid cells
+            for (int row = 0; row < rows; row++)
+            {
+                for (int col = 0; col < columns; col++)
+                {
+                    Brush cellBrush = currentGrid[row][col] switch
+                    {
+                        '+' => blockedBrush,
+                        'x' => goalBrush,
+                        _ => openBrush
+                    };
+
+                    Rectangle cell = new
+                        (offsetX + col * cellSize, offsetY + row * cellSize, cellSize, cellSize);
+                    
+                    graphics.FillRectangle(cellBrush, cell);
+                    graphics.DrawRectangle(gridPen, cell);
+                }
+            }
+
             if (currentPath.Count == 0)
                 return;
 
-            Graphics graphics = e.Graphics;
-
-            int margin = 30;
-            int availableWidth = Math.Max(1, pathPanel.Width - 2 * margin);
-            int availableHeight = Math.Max(1, pathPanel.Height - 2 * margin);
-            
-            int minX = currentPath.Min(p => p.X);
-            int maxX = currentPath.Max(p => p.X);
-            int minY = currentPath.Min(p => p.Y);
-            int maxY = currentPath.Max(p => p.Y);
-
-            int rangeX = Math.Max(1, maxX - minX);
-            int rangeY = Math.Max(1, maxY - minY);
-
-            float scale = Math.Min(
-            (float)availableWidth / rangeX, 
-            (float)availableHeight / rangeY);
-
             PointF[] points = currentPath.Select(p => new PointF(
-                (p.X - minX) * scale + margin,
-                (p.Y - minY) * scale + margin
+                offsetX + p.Y * cellSize + cellSize / 2f,
+                offsetY + p.X * cellSize + cellSize / 2f
             )).ToArray();
 
             if (points.Length > 1)
@@ -270,6 +408,7 @@ namespace SEProject2.UI
             graphics.FillEllipse(startBrush, points[0].X - 5, points[0].Y - 5, 10, 10);
 
             PointF last = points[^1];
+
             graphics.FillEllipse(endBrush, last.X - 5, last.Y - 5, 10, 10);
         }
 

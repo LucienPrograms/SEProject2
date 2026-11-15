@@ -1,10 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net10.0</TargetFramework>
+    <TargetFramework>net10.0-windows</TargetFramework>
+	<UseWindowsForms>true</UseWindowsForms>
+	<EnableWindowsTargeting>true</EnableWindowsTargeting>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
   </PropertyGroup>
 
   <ItemGroup>
@@ -20,6 +23,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SEProject2\SEProject2.csproj" />
+	<ProjectReference Include="..\SEProject.UI\SEProject2.UI.csproj" />
   </ItemGroup>
 
 </Project>
