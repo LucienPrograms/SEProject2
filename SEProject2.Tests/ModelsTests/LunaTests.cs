@@ -1,4 +1,4 @@
-﻿namespace SEProject2.Tests;
+﻿namespace SEProject2.Tests.ModelsTests;
 
 using Models;
 

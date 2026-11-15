@@ -2,8 +2,8 @@ namespace SEProject2.Models;
 
 public class Space
 {
-    int Height { get; }
-    int Width { get; }
+    public int Height { get; }
+    public int Width { get; }
     List<List<States>> AsteroidField { get; } = [];
 
     private enum States { Asteroid, Open, End }
@@ -11,17 +11,17 @@ public class Space
     /// <summary>
     /// Creates a new Space object denoting the existence of an Asteroid Field.
     /// </summary>
-    /// <param name="input">Asteroid Field in text form.</param>
+    /// <param name="asteroidFieldText">Asteroid field in text form.</param>
     /// <exception cref="Exception">Thrown when provided Asteroid Field is not rectangular.</exception>
-    public Space(string input = "")
+    public Space(string asteroidFieldText = "")
     {
-        string[] lines = input.Split("\n");
+        string[] lines = asteroidFieldText.Split("\n");
 
-        if (!CheckLineLength(lines)) throw new Exception("Line lengths do not match.");
+        if (!CheckLineLength(lines)) throw new InvalidSpaceException("Line lengths do not match.");
 
         Height = lines.Length; Width = lines[0].Length;
 
-        if (input.Length > 0) ParseGrid(lines);
+        if (asteroidFieldText.Length > 0) ParseGrid(lines);
     }
 
     /// <summary>
@@ -50,7 +50,7 @@ public class Space
         '+' => States.Asteroid,
         'o' => States.Open,
         'x' => States.End,
-        _ => throw new Exception("Invalid grid character")
+        _ => throw new InvalidSpaceException("Invalid character.")
     };
 
     /// <summary>
