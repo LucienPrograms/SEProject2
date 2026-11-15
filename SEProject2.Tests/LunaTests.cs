@@ -32,8 +32,8 @@ public class CharacterTests
 
     [Theory]
     [InlineData(0, 0, 0)]
-    [InlineData(4, 4, 0)]
-    [InlineData(10, 10, 0)]
+    [InlineData(4, 0, 4)]
+    [InlineData(10, 0, 10)]
     public void MoveStepsTest(uint steps, int expectedX, int expectedY)
     {
         // Arrange

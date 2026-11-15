@@ -8,6 +8,9 @@ public class Luna
     private readonly List<string> _executedCommandTrace = [];
     private Space AsteroidField { get; } = new();
 
+    /// <summary>
+    /// Creates new Moon.
+    /// </summary>
     public Luna() => ResetToStart();
 
     /// <summary>
@@ -21,10 +24,12 @@ public class Luna
         _executedCommandTrace.Clear();
     }
 
+    public void GoalReached() => AsteroidField.IsDestination(X, Y);
+
     /// <summary>
-    /// Checks if there's a wall ahead.
+    /// Checks if the next step forward would enter a blocked space.
     /// </summary>
-    /// <returns>Whether or not a faceplant would occur.</returns>
+    /// <returns>Faceplant prospect.</returns>
     public bool IsWallAhead()
     {
         try
@@ -40,9 +45,9 @@ public class Luna
     }
 
     /// <summary>
-    /// Checks if the next step forward would exit the 
+    /// Checks if the next step forward would exit the Asteroid Field.
     /// </summary>
-    /// <returns></returns>
+    /// <returns>Faceplant prospect.</returns>
     public bool IsGridEdge()
     {
         try
