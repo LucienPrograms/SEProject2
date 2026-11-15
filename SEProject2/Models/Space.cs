@@ -6,7 +6,7 @@ public class Space
     int Width { get; }
     List<List<States>> AsteroidField { get; } = [];
 
-    private enum States { Asteroid, Open, End }
+    private enum States { Asteroid, Empty, Goal }
 
     /// <summary>
     /// Creates a new Space object denoting the existence of an Asteroid Field.
@@ -48,8 +48,8 @@ public class Space
     private States ConvertToState(char character) => character switch
     {
         '+' => States.Asteroid,
-        'o' => States.Open,
-        'x' => States.End,
+        'o' => States.Empty,
+        'x' => States.Goal,
         _ => throw new Exception("Invalid grid character")
     };
 
@@ -95,7 +95,7 @@ public class Space
     {
         if (!AsteroidField.Any())
             return true;
-        if (AsteroidField[x][y] == States.End)
+        if (AsteroidField[x][y] == States.Goal)
             return true;
         return false;
     }
