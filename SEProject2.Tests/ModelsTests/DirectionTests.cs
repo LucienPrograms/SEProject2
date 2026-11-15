@@ -9,16 +9,16 @@ public class DirectionTests
     [InlineData(Direction.Heading.East, Direction.Heading.South)]
     [InlineData(Direction.Heading.South, Direction.Heading.West)]
     [InlineData(Direction.Heading.West, Direction.Heading.North)]
-    public void TestRight(Direction.Heading heading, Direction.Heading expected_heading)
+    public void TestRight(Direction.Heading heading, Direction.Heading expectedHeading)
     {
         // arrange
-        Direction.Heading new_heading;
+        Direction.Heading newHeading;
 
         // act
-        new_heading = Direction.Right[heading];
+        newHeading = Direction.Right[heading];
 
         // assert
-        Assert.Equal(expected_heading, new_heading);
+        Assert.Equal(expectedHeading, newHeading);
     }
 
     [Theory]
@@ -26,15 +26,33 @@ public class DirectionTests
     [InlineData(Direction.Heading.East, Direction.Heading.North)]
     [InlineData(Direction.Heading.South, Direction.Heading.East)]
     [InlineData(Direction.Heading.West, Direction.Heading.South)]
-    public void TestLeft(Direction.Heading heading, Direction.Heading expected_heading)
+    public void TestLeft(Direction.Heading heading, Direction.Heading expectedHeading)
     {
         // arrange
-        Direction.Heading new_heading;
+        Direction.Heading newHeading;
 
         // act
-        new_heading = Direction.Left[heading];
+        newHeading = Direction.Left[heading];
 
-        // ssert
-        Assert.Equal(expected_heading, new_heading);
+        // assert
+        Assert.Equal(expectedHeading, newHeading);
+    }
+
+    [Theory]
+    [InlineData(Direction.Heading.North, -1, 0)]
+    [InlineData(Direction.Heading.East, 0, 1)]
+    [InlineData(Direction.Heading.South, 1, 0)]
+    [InlineData(Direction.Heading.West, 0, -1)]
+    public void TestStep(Direction.Heading heading, int expectedDeltaX, int expectedDeltaY)
+    {
+        // arrange
+        (int, int) delta;
+        (int, int) expected = (expectedDeltaX, expectedDeltaY);
+
+        //act
+        delta = Direction.Step[heading];
+
+        // assert
+        Assert.Equal(expected, delta);
     }
 }

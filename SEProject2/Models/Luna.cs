@@ -6,18 +6,16 @@ public class Luna
     public int Y { get; private set; }
     public Direction.Heading Facing { get; private set; }
     private readonly List<string> _executedCommandTrace = [];
-    public Space AsteroidField { get; set; } = new Space("");
+
+    public Space AsteroidField { get; }
 
     private readonly List<(int X, int Y)> _path = new();
 
     /// <summary>
     /// Creates Luna without a loaded asteroid field. 
     /// </summary>
-    public Luna()
-    {
-        AsteroidField = new Space("");
-        ResetToStart();
-    }
+
+    public Luna() : this(new Space()) {}
 
     /// <summary>
     /// Creates Luna with the supplied asteroid field. 
@@ -28,8 +26,6 @@ public class Luna
         AsteroidField = asteroidField;
         ResetToStart();
     }
-
-
 
     /// <summary>
     /// (Re)sets Luna to starting position and direction. (0, 0) facing East.
@@ -47,11 +43,18 @@ public class Luna
 
     }
 
+    public bool GoalReached() => AsteroidField.IsDestination(X, Y);
+
+    /// <summary>
+    /// Checks if the next step forward would enter a blocked space.
+    /// </summary>
+    /// <returns>Faceplant prospect.</returns>
+    
     public bool IsWallAhead()
     {
         try
         {
-            var (dx, dy) = Direction.Step[Facing];
+            (int dx, int  dy) = Direction.Step[Facing];
             AsteroidField.Collision(X + dx, Y + dy);
         }
         catch(BlockedLocationException)
@@ -61,11 +64,15 @@ public class Luna
         return false;
     }
 
+    /// <summary>
+    /// Checks if the next step forward would exit the Asteroid Field.
+    /// </summary>
+    /// <returns>Faceplant prospect.</returns>
     public bool IsGridEdge()
     {
         try
         {
-            var (dx, dy) = Direction.Step[Facing];
+            (int dx, int dy) = Direction.Step[Facing];
             AsteroidField.Collision(X + dx, Y + dy);
         }
         catch(OutOfBoundsException)
@@ -81,12 +88,13 @@ public class Luna
     /// <param name="steps">How many steps Luna is taking.</param>
     public void MoveForward(uint steps)
     {
-        var (dx, dy) = Direction.Step[Facing];
+        (int dx, int dy) = Direction.Step[Facing];
 
-        AsteroidField.Collision(X + dx, Y + dy);
+        
 
         for (int i = 0; i < steps; i++)
         {
+            AsteroidField.Collision(X + dx, Y + dy);
             X += dx;
             Y += dy;
 
@@ -120,7 +128,7 @@ public class Luna
     /// Retrieves the current position and direction of Luna.
     /// </summary>
     /// <returns>string with location (X, Y) and the direction Luna is facing (Direction.Heading).</returns>
-    public string GetState() => $"({X}, {Y}) facing {Facing.ToString().ToLower()}";
+    public string GetState() => $"({X}, {Y}) facing {Facing}";
 
     public IReadOnlyList<string> GetTraceEntries() => _executedCommandTrace.AsReadOnly();
 

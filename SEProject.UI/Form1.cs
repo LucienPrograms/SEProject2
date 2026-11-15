@@ -294,12 +294,14 @@ namespace SEProject2.UI
         /// <summary>
         /// Executes the program currently written in the editor.
         /// Displays the execution trace, final path and character path.
+        /// Runtime errors are displayed in the output box
         /// </summary>
 
         private void RunProgram()
         {
             currentPath = Array.Empty<(int X, int Y)>();
             pathPanel.Invalidate();
+            outputBox.Clear();
 
             try
             {
@@ -312,7 +314,9 @@ namespace SEProject2.UI
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Program error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                outputBox.Text = $"Runtime error: {ex.Message}";
+                currentPath = Array.Empty<(int X, int Y)>();
+                pathPanel.Invalidate();
             }
         }
 
@@ -322,17 +326,20 @@ namespace SEProject2.UI
         /// </summary>
         private void ShowMetrics()
         {
+            metricsBox.Clear();
             try
             {
                 programService.LoadProgramFromText("Lunar Program", programEditor.Text);
+
                 var metrics = programService.GetMetrics();
+
                 metricsBox.Text = $"Command count: {metrics.CommandCount}\r\n" + 
                                   $"Max nesting depth: {metrics.MaxNestingDepth}\r\n" + 
                                   $"Repeat count: {metrics.RepeatCount}\r\n";
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Metrics error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                metricsBox.Text = $"Metrics error: {ex.Message}";
             }
         }
 
