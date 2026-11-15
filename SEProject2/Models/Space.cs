@@ -6,7 +6,7 @@ public class Space
 {
     int Height { get; }
     int Width { get; }
-    List<List<States>> AsteroidField { get; }
+    List<List<States>> AsteroidField { get; } = new List<List<States>>();
 
     private enum States { Blocked, Open, End }
 
@@ -22,11 +22,13 @@ public class Space
 
     public void Collision (int x, int y)
     {
+        if (!AsteroidField.Any()) 
+            return;
         if (x < 0 || x >= Height || y < 0 || y >= Width) 
             throw new OutOfBoundsException($" Position ({x}, {y}) is outside the grid.");
         if (AsteroidField[x][y] == States.Blocked) 
-                throw new BlockedLocationException($" Position ({x}, {y}) is blocked.");
-        return false;
+            throw new BlockedLocationException($" Position ({x}, {y}) is blocked.");
+        return;
     }
 
     private void ParseGrid(string[] lines)
@@ -57,5 +59,4 @@ public class Space
         }
         return true;
     }
-
 }

@@ -21,9 +21,33 @@ public class Luna
         _executedCommandTrace.Clear();
     }
 
-    public bool IsWallAhead() => throw new NotImplementedException();
+    public bool IsWallAhead()
+    {
+        try
+        {
+            var (dx, dy) = Direction.Step[Facing];
+            AsteroidField.Collision(X + dx, Y + dy);
+        }
+        catch(BlockedLocationException)
+        {
+            return true;
+        }
+        return false;
+    }
 
-    public bool IsGridEdge() => throw new NotImplementedException();
+    public bool IsGridEdge()
+    {
+        try
+        {
+            var (dx, dy) = Direction.Step[Facing];
+            AsteroidField.Collision(X + dx, Y + dy);
+        }
+        catch(OutOfBoundsException)
+        {
+            return true;
+        }
+        return false;
+    }
 
     /// <summary>
     /// Moves Luna in the direction she is facing.
