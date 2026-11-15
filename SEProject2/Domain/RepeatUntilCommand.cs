@@ -2,6 +2,8 @@
 
 namespace SEProject2.Domain;
 
+public enum RepeatCondition { WallAhead, GridEdge }
+
 public class RepeatUntilCommand(RepeatCondition condition, IReadOnlyList<ICommand> subCommands) : ICommand
 {
     public IReadOnlyList<ICommand> SubCommands { get; } = subCommands;
