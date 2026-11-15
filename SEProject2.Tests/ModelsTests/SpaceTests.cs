@@ -1,4 +1,3 @@
-using System.Runtime.InteropServices.JavaScript;
 using SEProject2.Models;
 
 namespace SEProject2.Tests.ModelsTests;
