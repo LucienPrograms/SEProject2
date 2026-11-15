@@ -10,3 +10,8 @@ public class BlockedLocationException : Exception
 {
     public BlockedLocationException(string message) : base(message) { }
 }
+
+public class InvalidSpaceException : Exception
+{
+    public InvalidSpaceException(string message) : base(message) { }
+}
