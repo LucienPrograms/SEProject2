@@ -155,7 +155,7 @@ namespace SEProject2.UI
 
         /// <summary>
         /// Loads grid text into the program service and prepares it for display.
-        /// This method can also be used by GUI tests without opening a file dialog.
+        /// Clears the editor, so the user can write a new solution for the grid
         /// </summary>
         /// <param name="gridText"> The text represention of the grid </param>
 
@@ -179,6 +179,9 @@ namespace SEProject2.UI
 
             currentGrid = lines;
             currentPath = Array.Empty<(int X, int Y)>();
+
+            //The user writes a new solution for the loaded grid
+            programEditor.Clear();
 
             outputBox.Clear();
             metricsBox.Clear();
@@ -311,6 +314,20 @@ namespace SEProject2.UI
 
                 currentPath = result.Path;
                 pathPanel.Invalidate(); 
+
+                if (result.RuntimeError != null)
+                {
+                    outputBox.AppendText(Environment.NewLine + $"Runtime error: {result.RuntimeError}");
+                }
+                else if (result.GoalReached)
+                {
+                    outputBox.AppendText(Environment.NewLine + $"Success: Goal reached");
+                }
+                else
+                {
+                    outputBox.AppendText(Environment.NewLine + $"Failure: Goal not reached");
+                }
+
             }
             catch (Exception ex)
             {

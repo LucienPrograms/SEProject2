@@ -70,6 +70,130 @@ namespace SEProject2.Tests.GUITests
             });
         }
 
+        /// Verifies that loading a grid clears the program editor,
+        /// allowing the user to write a new solution.
+        /// </summary>
+        [Fact]
+        public void LoadGridText_ShouldClearProgramEditor()
+        {
+            RunOnStaThread(() =>
+            {
+                using Form1 form = new Form1();
+
+                form.Show();
+                System.Windows.Forms.Application.DoEvents();
+
+                TextBox editor = FindTextBox(form, "Program Editor");
+                editor.Text = "Move 1";
+
+                form.LoadGridText("ooo\nooo\noox");
+                System.Windows.Forms.Application.DoEvents();
+                Assert.Empty(editor.Text);
+            });
+        }
+
+        /// <summary>
+        /// Verifies that the GUI reports success when the character
+        /// follows a valid path to the goal.
+        /// </summary>
+        [Fact]
+        public void RunProgram_ShouldReportSuccessWhenGoalReached()
+        {
+            RunOnStaThread(() =>
+            {
+                using Form1 form = new Form1();
+
+                form.Show();
+                System.Windows.Forms.Application.DoEvents();
+
+                form.LoadGridText(
+                    "oo+++\n" +
+                    "+oo++\n" +
+                    "++o++\n" +
+                    "++o++\n" +
+                    "++oox");
+
+                TextBox editor = FindTextBox(form, "Program Editor");
+                TextBox output = FindTextBox(form, "Output");
+
+                editor.Text =
+                    "Move 1\n" +
+                    "Turn right\n" +
+                    "Move 1\n" +
+                    "Turn left\n" +
+                    "Move 1\n" +
+                    "Turn right\n" +
+                    "Move 3\n" +
+                    "Turn left\n" +
+                    "Move 2";
+
+                FindButton(form, "Run").PerformClick();
+
+                Assert.Contains("Success: Goal reached", output.Text);
+                Assert.Contains("End state: (4, 4)", output.Text);
+            });
+        }
+
+        /// <summary>
+        /// Verifies that the GUI reports failure when the character
+        /// finishes the program without reaching the goal.
+        /// </summary>
+        [Fact]
+        public void RunProgram_ShouldReportFailureWhenGoalNotReached()
+        {
+            RunOnStaThread(() =>
+            {
+                using Form1 form = new Form1();
+
+                form.Show();
+                System.Windows.Forms.Application.DoEvents();
+
+                form.LoadGridText(
+                    "ooo\n" +
+                    "ooo\n" +
+                    "oox");
+
+                TextBox editor = FindTextBox(form, "Program Editor");
+                TextBox output = FindTextBox(form, "Output");
+
+                editor.Text = "Move 1";
+
+                FindButton(form, "Run").PerformClick();
+
+                Assert.Contains("Failure: Goal not reached", output.Text);
+            });
+        }
+
+        /// <summary>
+        /// Verifies that the GUI displays a runtime error when the
+        /// character attempts to move into a blocked cell.
+        /// </summary>
+        [Fact]
+        public void RunProgram_ShouldReportRuntimeErrorWhenHittingWall()
+        {
+            RunOnStaThread(() =>
+            {
+                using Form1 form = new Form1();
+
+                form.Show();
+                System.Windows.Forms.Application.DoEvents();
+
+                form.LoadGridText(
+                    "oo+\n" +
+                    "ooo\n" +
+                    "ooo");
+
+                TextBox editor = FindTextBox(form, "Program Editor");
+                TextBox output = FindTextBox(form, "Output");
+
+                editor.Text = "Move 2";
+
+                FindButton(form, "Run").PerformClick();
+
+                Assert.Contains("Runtime error:", output.Text);
+            });
+        }
+
         /// <summary>
         /// Verifies that grid text with Windows line endings and
         /// a trailing newline can be loaded.

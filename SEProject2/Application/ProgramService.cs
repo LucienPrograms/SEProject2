@@ -49,6 +49,8 @@ public class ProgramService
 
     /// <summary>
     /// Executes the loaded program and returns its execution result
+    /// The result also contains the path and error information if 
+    /// a runtime error occurs
     /// </summary>
     /// <returns> The execution trace, final state and character path </returns>
     /// <exception cref="InvalidOperationException"> Throw when no program has been loaded </exception>
@@ -61,13 +63,26 @@ public class ProgramService
             throw new InvalidOperationException("No program loaded.");
         }
 
-        currentProgram.Execute();
+        string? runtimeError = null;
+
+        try
+        {
+            currentProgram.Execute();
+        }
+        catch (Exception ex)
+        {
+            runtimeError = ex.Message;
+        }
+       
 
         return new ExecutionResult
         {
             Trace = string.Join(", ", currentProgram.Character.GetTraceEntries()), 
             FinalState = currentProgram.Character.GetState(),
-            Path = currentProgram.Character.GetPath()
+            Path = currentProgram.Character.GetPath(),
+            GoalReached = runtimeError == null && 
+                currentProgram.Character.GoalReached(),
+            RuntimeError = runtimeError
         };
     }
 

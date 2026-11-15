@@ -17,5 +17,12 @@ namespace SEProject2.Application
 
         //Gets or sets every position visited by the character, including the starting position.
         public IReadOnlyList<(int X, int Y)> Path { get; set; } = Array.Empty<(int X, int Y)>();
+
+        //Indicates whether the character has reached the goal
+        public bool GoalReached { get; set; } 
+
+        //Contains the runtime error message if an error occured
+        public string? RuntimeError { get; set; } 
+
     }
 }
