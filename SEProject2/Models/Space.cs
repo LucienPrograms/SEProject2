@@ -1,54 +1,43 @@
+using System.Security.Cryptography;
+
 namespace SEProject2.Models;
 
-class Space
+public class Space
 {
     int Height { get; }
     int Width { get; }
-    States[][] AsteroidField { get; }
+    List<List<States>> AsteroidField { get; }
 
-    static enum States { Blocked, Open, End }
+    private enum States { Blocked, Open, End }
 
-    public Grid(string input)
+    public Space(string input)
     {
         string[] lines = input.Split("\n");
 
         if (!CheckLineLength(lines)) throw new Exception("Line lengths do not match.");
 
         Height = lines.Length; Width = lines[0].Length;
-        AsteroidField = new int[Height][Width];
         ParseGrid(lines);
     }
 
-    public bool Collision (int x, int y)
+    public void Collision (int x, int y)
     {
         if (x < 0 || x > Height || y < 0 || y > Width) throw new Exception("Out of Bounds Exception");
         if (AsteroidField[x][y] == States.Blocked) throw new Exception("Blocked ");
-        return false;
     }
 
-    private States[] ParseGrid(string[] lines)
+    private void ParseGrid(string[] lines)
     {
         int row = 0;
         foreach (string line in lines)
         {
-            AsteroidField[row] = ParseLine(line);   
+            AsteroidField.Add(new List<States>());
+            foreach (char character in line) AsteroidField[row].Add(ConvertToState(character));
             row++;
         }
     }
 
-    private States[] ParseLine(string line)
-    {
-        int column = 0;
-        States[] ParsedLine = new States[line.Length];
-        foreach (char character in line)
-        {
-            ParsedLine[column] = ConvertToState(character);
-            column++;
-        }
-        return ParsedLine;
-    }
-
-    private States? ConvertToState(char character) => character switch
+    private States ConvertToState(char character) => character switch
     {
         '+' => States.Blocked,
         'o' => States.Open,

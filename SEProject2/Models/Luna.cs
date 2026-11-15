@@ -6,7 +6,7 @@ public class Luna
     public int Y { get; private set; }
     public Direction.Heading Facing { get; private set; }
     private readonly List<string> _executedCommandTrace = [];
-    private Space AsteroidField { get; set; }
+    private Space AsteroidField { get; set; } = new Space("");
 
     public Luna() => ResetToStart();
 
@@ -22,6 +22,7 @@ public class Luna
     }
 
     public bool IsWallAhead() => throw new NotImplementedException();
+
     public bool IsGridEdge() => throw new NotImplementedException();
 
     /// <summary>
@@ -32,7 +33,7 @@ public class Luna
     {
         var (dx, dy) = Direction.Step[Facing];
 
-        if (Collision)
+        AsteroidField.Collision(X + dx, Y + dy);
 
         for (int i = 0; i < steps; i++)
         {
