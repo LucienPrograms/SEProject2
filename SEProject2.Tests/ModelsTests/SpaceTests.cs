@@ -1,4 +1,4 @@
-using System.Data;
+using System.Runtime.InteropServices.JavaScript;
 using SEProject2.Models;
 
 namespace SEProject2.Tests.ModelsTests;
@@ -84,5 +84,32 @@ public class SpaceTests
 
         // verify reason
         Assert.Equal("Invalid character.", exception.Message);
+    }
+
+    [Fact]
+    public void EmptySpaceCollisionTest()
+    {
+        // arrange
+        Space asteroidField = new Space();
+
+        // act
+        Exception? exception = Record.Exception(() => asteroidField.Collision(0, 0));
+            
+        // assert
+        Assert.Null(exception);
+    }
+
+    [Fact]
+    public void EmptySpaceDestinationTest()
+    {
+        // arrange
+        Space asteroidField = new Space();
+
+        // act
+        Exception? exception = Record.Exception(() => asteroidField.IsDestination(0, 0));
+            
+        // assert
+        Assert.Null(exception);
+        Assert.True(asteroidField.IsDestination(0, 0));
     }
 }
