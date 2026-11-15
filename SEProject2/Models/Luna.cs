@@ -21,11 +21,15 @@ public class Luna
         _executedCommandTrace.Clear();
     }
 
+    /// <summary>
+    /// Checks if there's a wall ahead.
+    /// </summary>
+    /// <returns>Whether or not a faceplant would occur.</returns>
     public bool IsWallAhead()
     {
         try
         {
-            var (dx, dy) = Direction.Step[Facing];
+            (int dx, int  dy) = Direction.Step[Facing];
             AsteroidField.Collision(X + dx, Y + dy);
         }
         catch(BlockedLocationException)
@@ -35,11 +39,15 @@ public class Luna
         return false;
     }
 
+    /// <summary>
+    /// Checks if the next step forward would exit the 
+    /// </summary>
+    /// <returns></returns>
     public bool IsGridEdge()
     {
         try
         {
-            var (dx, dy) = Direction.Step[Facing];
+            (int dx, int dy) = Direction.Step[Facing];
             AsteroidField.Collision(X + dx, Y + dy);
         }
         catch(OutOfBoundsException)
@@ -55,7 +63,7 @@ public class Luna
     /// <param name="steps">How many steps Luna is taking.</param>
     public void MoveForward(uint steps)
     {
-        var (dx, dy) = Direction.Step[Facing];
+        (int dx, int dy) = Direction.Step[Facing];
 
         AsteroidField.Collision(X + dx, Y + dy);
 
