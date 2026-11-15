@@ -6,7 +6,7 @@ public class Luna
     public int Y { get; private set; }
     public Direction.Heading Facing { get; private set; }
     private readonly List<string> _executedCommandTrace = [];
-    private Space AsteroidField { get; set; } = new Space("");
+    private Space AsteroidField { get; } = new();
 
     public Luna() => ResetToStart();
 
@@ -89,7 +89,7 @@ public class Luna
     /// Retrieves the current position and direction of Luna.
     /// </summary>
     /// <returns>string with location (X, Y) and the direction Luna is facing (Direction.Heading).</returns>
-    public string GetState() => $"({X}, {Y}) facing {Facing.ToString().ToLower()}";
+    public string GetState() => $"({X}, {Y}) facing {Facing}";
 
     public IReadOnlyList<string> GetTraceEntries() => _executedCommandTrace.AsReadOnly();
 }

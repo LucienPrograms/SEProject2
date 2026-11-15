@@ -1,23 +1,22 @@
-using System.Security.Cryptography;
-
 namespace SEProject2.Models;
 
 public class Space
 {
     int Height { get; }
     int Width { get; }
-    List<List<States>> AsteroidField { get; } = new List<List<States>>();
+    List<List<States>> AsteroidField { get; } = [];
 
     private enum States { Blocked, Open, End }
 
-    public Space(string input)
+    public Space(string input = "")
     {
         string[] lines = input.Split("\n");
 
         if (!CheckLineLength(lines)) throw new Exception("Line lengths do not match.");
 
         Height = lines.Length; Width = lines[0].Length;
-        ParseGrid(lines);
+
+        if (input.Length > 0) ParseGrid(lines);
     }
 
     public void Collision (int x, int y)
@@ -28,7 +27,6 @@ public class Space
             throw new OutOfBoundsException($" Position ({x}, {y}) is outside the grid.");
         if (AsteroidField[x][y] == States.Blocked) 
             throw new BlockedLocationException($" Position ({x}, {y}) is blocked.");
-        return;
     }
 
     private void ParseGrid(string[] lines)
@@ -36,7 +34,7 @@ public class Space
         int row = 0;
         foreach (string line in lines)
         {
-            AsteroidField.Add(new List<States>());
+            AsteroidField.Add([]);
             foreach (char character in line) AsteroidField[row].Add(ConvertToState(character));
             row++;
         }

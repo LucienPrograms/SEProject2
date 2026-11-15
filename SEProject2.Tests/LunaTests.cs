@@ -1,6 +1,6 @@
 ﻿namespace SEProject2.Tests;
 
-using SEProject2.Models;
+using Models;
 
 public class CharacterTests
 {
@@ -8,10 +8,10 @@ public class CharacterTests
     public void StartingDirectionTest()
     {
         // Arrange
-        Luna Luna = new Luna();
+        Luna luna = new Luna();
             
         // Act
-        Direction.Heading heading = Luna.Facing;
+        Direction.Heading heading = luna.Facing;
 
         // Assert
         Assert.Equal(Direction.Heading.East, heading);
@@ -21,10 +21,10 @@ public class CharacterTests
     public void StartingLocationTest()
     {
         // Arrange
-        Luna Luna = new Luna();
+        Luna luna = new Luna();
 
         // Act
-        (int, int) location = (Luna.X, Luna.Y);
+        (int, int) location = (luna.X, luna.Y);
 
         // Assert
         Assert.Equal((0, 0), location);
@@ -34,15 +34,15 @@ public class CharacterTests
     [InlineData(0, 0, 0)]
     [InlineData(4, 4, 0)]
     [InlineData(10, 10, 0)]
-    public void MoveStepsTest(uint steps, int expected_x, int expected_y)
+    public void MoveStepsTest(uint steps, int expectedX, int expectedY)
     {
         // Arrange
-        Luna Luna = new Luna();
-        (int, int) expected = (expected_x, expected_y);
+        Luna luna = new Luna();
+        (int, int) expected = (expectedX, expectedY);
 
         // Act
-        Luna.MoveForward(steps);
-        (int, int) location = (Luna.X, Luna.Y);
+        luna.MoveForward(steps);
+        (int, int) location = (luna.X, luna.Y);
 
         // Assert
         Assert.Equal(expected, location);
@@ -60,34 +60,34 @@ public class CharacterTests
     public void TurnCharacterTest(Direction.LeftRight turnDirection, int count, Direction.Heading expected)
     {
         // Arrange
-        Luna Luna = new Luna();
+        Luna luna = new Luna();
 
         // Act
         for (int i = 0; i < count; i++)
         {
-            Luna.Turn(turnDirection);   
+            luna.Turn(turnDirection);   
         }
 
         // Assert
-        Assert.Equal(expected, Luna.Facing);
+        Assert.Equal(expected, luna.Facing);
     }
 
     [Fact]
     public void ResetCharacterToStartTest()
     {
         // Arrange
-        Luna Luna = new Luna();
+        Luna luna = new Luna();
     
         // Act
-        Luna.MoveForward(4);
-        Luna.Turn(Direction.LeftRight.Left);
-        Luna.MoveForward(7);
-        Luna.Turn(Direction.LeftRight.Right);
-        Luna.MoveForward(8);
+        luna.MoveForward(4);
+        luna.Turn(Direction.LeftRight.Left);
+        luna.MoveForward(7);
+        luna.Turn(Direction.LeftRight.Right);
+        luna.MoveForward(8);
 
-        Luna.ResetToStart();
+        luna.ResetToStart();
 
-        (int, int) location = (Luna.X, Luna.Y);
+        (int, int) location = (luna.X, luna.Y);
     
         // Assert
         Assert.Equal((0, 0), location);
