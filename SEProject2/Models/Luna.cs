@@ -6,8 +6,11 @@ public class Luna
     public int Y { get; private set; }
     public Direction.Heading Facing { get; private set; }
     private readonly List<string> _executedCommandTrace = [];
-    private Space AsteroidField { get; set; } = new Space("");
+    private Space AsteroidField { get; } = new();
 
+    /// <summary>
+    /// Creates new Moon.
+    /// </summary>
     public Luna() => ResetToStart();
 
     /// <summary>
@@ -21,11 +24,17 @@ public class Luna
         _executedCommandTrace.Clear();
     }
 
+    public void GoalReached() => AsteroidField.IsDestination(X, Y);
+
+    /// <summary>
+    /// Checks if the next step forward would enter a blocked space.
+    /// </summary>
+    /// <returns>Faceplant prospect.</returns>
     public bool IsWallAhead()
     {
         try
         {
-            var (dx, dy) = Direction.Step[Facing];
+            (int dx, int  dy) = Direction.Step[Facing];
             AsteroidField.Collision(X + dx, Y + dy);
         }
         catch(BlockedLocationException)
@@ -35,11 +44,15 @@ public class Luna
         return false;
     }
 
+    /// <summary>
+    /// Checks if the next step forward would exit the Asteroid Field.
+    /// </summary>
+    /// <returns>Faceplant prospect.</returns>
     public bool IsGridEdge()
     {
         try
         {
-            var (dx, dy) = Direction.Step[Facing];
+            (int dx, int dy) = Direction.Step[Facing];
             AsteroidField.Collision(X + dx, Y + dy);
         }
         catch(OutOfBoundsException)
@@ -55,7 +68,7 @@ public class Luna
     /// <param name="steps">How many steps Luna is taking.</param>
     public void MoveForward(uint steps)
     {
-        var (dx, dy) = Direction.Step[Facing];
+        (int dx, int dy) = Direction.Step[Facing];
 
         AsteroidField.Collision(X + dx, Y + dy);
 
@@ -89,7 +102,7 @@ public class Luna
     /// Retrieves the current position and direction of Luna.
     /// </summary>
     /// <returns>string with location (X, Y) and the direction Luna is facing (Direction.Heading).</returns>
-    public string GetState() => $"({X}, {Y}) facing {Facing.ToString().ToLower()}";
+    public string GetState() => $"({X}, {Y}) facing {Facing}";
 
     public IReadOnlyList<string> GetTraceEntries() => _executedCommandTrace.AsReadOnly();
 }
