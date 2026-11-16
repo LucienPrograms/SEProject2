@@ -8,22 +8,20 @@ public class RepeatUntilCommand(RepeatCondition condition, IReadOnlyList<IComman
 {
     public IReadOnlyList<ICommand> SubCommands { get; } = subCommands;
 
-    private bool CheckCondition(Luna c) => condition switch
+    private bool ConditionIsNotMet(Luna c) => !(condition switch
     { 
         RepeatCondition.GridEdge => c.IsGridEdge(), 
         RepeatCondition.WallAhead => c.IsWallAhead()
-    };
+    });
 
     public void Execute(Luna c)
     {
-        bool conditionNotMet = CheckCondition(c);
-        while (conditionNotMet)
+        while (ConditionIsNotMet(c))
         {
             foreach (var subCommand in SubCommands)
             {
                 subCommand.Execute(c);
             }
-            conditionNotMet = CheckCondition(c);
         }
     }
 }
