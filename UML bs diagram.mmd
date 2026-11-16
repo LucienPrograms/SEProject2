@@ -27,7 +27,7 @@
         +string FinalState
     }
 
-    class UserProgram {
+    class LunarProgram {
         +string Name
         +List~ICommand~ Commands
         +Character Character
@@ -52,6 +52,7 @@
         +CreateMove(steps: uint) MoveCommand
         +CreateTurn(direction: Direction.LeftRight) TurnCommand
         +CreateRepeat(amount: uint, subCommands: IReadOnlyList~ICommand~) RepeatCommand
+        +CreateRepeatUntil(RepeatCondition condition, IReadOnlyList<ICommand> subCommands) RepeatUntilCommand
     }
 
     class ICommand {
@@ -75,13 +76,22 @@
         +Execute(Character c): void
     }
 
+    class RepeatUntilCommand {
+        <<enumeration>> RepeatCondition
+        WallAhead
+        GridEdge
+        +enum condition
+        +IReadOnlyList~ICommand~ subCommands
+        +Execute(Character c): void
+    }
+
     class Direction {
         <<enumeration>> Heading
         EAST
         WEST 
         NORTH 
         SOUTH
-        <<enum>> LeftRight
+        <<enumeration>> LeftRight
         Left 
         Right
         + Right: Dictionary ~Heading, Heading~
@@ -89,17 +99,37 @@
         + Step: Dictionary ~Heading, (int, int)~
     }
 
-    class Character {
+    class Luna {
         +int X
         +int Y
         +Direction.Heading Facing
+        +public Space AsteroidField
         -List ~string~ executeCommandTrace
         +ResetToStart(): void
+        +GoalReached(): bool
+        +IsWallAhead(): bool
+        +IsGridEdge(): bool
         +MoveForwards(int steps): void
         +Turn(Direction.LeftRight direction): void
         GetState(): string
         GetTraceEntries(): IReadOnlyList~string~
     }
+
+    class Space {
+        +int Height
+        +int Width
+        +List<List<States>> AsteroidField
+        <<enumeration>> States
+        Asteroid
+        Empty
+        Goal
+        -ParseGrid(string[] lines): void
+        -ConvertToState(char character): States
+        -CheckLineLength(string[] lines): bool
+        +Collision(int x, int y): bool
+        +IsDestination(int x, int y): bool
+    }
+
 
     class ProgramImporter {
         +ImportFromFile(string filePath) UserProgram
@@ -125,7 +155,7 @@
     }
 
     Form1 ..> ProgramService 
-    ProgramService ..> Userprogram
+    ProgramService ..> LunarProgram
     ProgramService ..> ProgramImporter
     ProgramService ..> ExecutionResult
     ProgramService ..> ProgramMetrics
@@ -133,13 +163,16 @@
     ProgramImporter ..> CommandFactory
     CommandFactory ..> ICommand
     CommandFactory <.. ParsedLine
-    UserProgram "1" *-- "0..*" ICommand 
-    UserProgram "1" *-- "1" Character
+    LunarProgram "1" *-- "0..*" ICommand 
+    LunarProgram "1" *-- "1" Luna
+    Luna ..> Space
     ICommand <|.. MoveCommand
     ICommand <|.. TurnCommand
     ICommand <|.. RepeatCommand
+    ICommand <|.. RepeatUntilCommand
+    RepeatUntilCommand "1" *-- "0..*" ICommand
     RepeatCommand "1" *-- "0..*" ICommand
     ProgramImporter ..> LineParser 
-    ProgramImporter ..> UserProgram 
+    ProgramImporter ..> LunarProgram 
     LineParser ..> ParsedLine 
-    ProgramMetrics --> UserProgram 
+    ProgramMetrics --> LunarProgram 
