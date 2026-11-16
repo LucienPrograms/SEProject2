@@ -80,7 +80,7 @@ public class Space
         if (!AsteroidField.Any()) 
             return;
         if (x < 0 || x >= Height || y < 0 || y >= Width) 
-            throw new OutOfBoundsException($" Position ({x}, {y}) is outside the grid.");
+            throw new OutOfBoundsException($" Position ({x}, {y}) is outside the Asteroid Field.");
         if (AsteroidField[x][y] == States.Asteroid) 
             throw new BlockedLocationException($" Position ({x}, {y}) is blocked.");
     }

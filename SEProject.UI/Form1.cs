@@ -63,7 +63,7 @@ namespace SEProject2.UI
             buttonPanel.Controls.Add(CreateButton("Expert", LoadExpert));
             buttonPanel.Controls.Add(CreateButton("Run", RunProgram));
             buttonPanel.Controls.Add(CreateButton("Metrics", ShowMetrics));
-            buttonPanel.Controls.Add(CreateButton("Load asteroid field", LoadAsteroidField));
+            buttonPanel.Controls.Add(CreateButton("Load Asteroid Field", LoadAsteroidField));
 
             mainLayout.Controls.Add(buttonPanel, 0, 0);
             mainLayout.SetColumnSpan(buttonPanel, 2);
@@ -160,7 +160,7 @@ namespace SEProject2.UI
         {
             if (string.IsNullOrWhiteSpace(gridText))
             {
-                throw new ArgumentException("Grid cannot be empty.", nameof (gridText));
+                throw new InvalidSpaceException("Asteroid Field cannot be empty.");
             }
 
             string normalizedGrid = gridText.Replace("\r\n", "\n").Replace('\r', '\n').Trim('\n');
@@ -169,7 +169,7 @@ namespace SEProject2.UI
 
             if (lines.Any(string.IsNullOrWhiteSpace))
             {
-                throw new ArgumentException("Grid cannot contain empty rows.", nameof(gridText));
+                throw new InvalidSpaceException("Asteroid Field cannot contain empty rows.");
             }
 
             programService.LoadGridFromText(normalizedGrid);
@@ -195,7 +195,7 @@ namespace SEProject2.UI
         {
             using var dialog = new OpenFileDialog();
             dialog.Filter = "Text Files (*.txt)|*.txt|All Files(*.*)|*.*";
-            dialog.Title = "Select a grid file";
+            dialog.Title = "Select an Asteroid Field file";
 
             if (dialog.ShowDialog() != DialogResult.OK)
                 return;
@@ -207,7 +207,7 @@ namespace SEProject2.UI
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Grid load error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message, "Asteroid Field load error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
 
             }
@@ -231,7 +231,7 @@ namespace SEProject2.UI
             metricsBox.Clear();
 
             currentPath = Array.Empty<(int X, int Y)>();
-            pathPanel.Invalidate();
+            RunProgram();
         }
 
         /// <summary>
