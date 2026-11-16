@@ -1,8 +1,9 @@
 using SEProject2.Application;
+using SEProject2.Models;
 
 namespace SEProject2.UI
 {
-    public partial class Form1 : Form
+    public sealed partial class Form1 : Form
     {
 
         private readonly ProgramService programService = new();
@@ -17,7 +18,6 @@ namespace SEProject2.UI
         /// <summary>
         /// Initializes the main application window and builds the user interface
         /// </summary>
-
         public Form1()
         {
             InitializeComponent();
@@ -33,7 +33,6 @@ namespace SEProject2.UI
         /// <summary>
         /// Builds and arranges all controls in the main application window
         /// </summary>
-
         private void BuildInterface()
         {
             var mainLayout = new TableLayoutPanel
@@ -64,7 +63,7 @@ namespace SEProject2.UI
             buttonPanel.Controls.Add(CreateButton("Expert", LoadExpert));
             buttonPanel.Controls.Add(CreateButton("Run", RunProgram));
             buttonPanel.Controls.Add(CreateButton("Metrics", ShowMetrics));
-            buttonPanel.Controls.Add(CreateButton("Load grid", LoadGrid));
+            buttonPanel.Controls.Add(CreateButton("Load asteroid field", LoadAsteroidField));
 
             mainLayout.Controls.Add(buttonPanel, 0, 0);
             mainLayout.SetColumnSpan(buttonPanel, 2);
@@ -137,7 +136,6 @@ namespace SEProject2.UI
         /// <param name="text"> The text displayed on the button </param>
         /// <param name="action"> The action executed when the button is called </param>
         /// <returns> The created button </returns>
-
         private Button CreateButton(string text, Action action)
         {
             var button = new Button
@@ -158,7 +156,6 @@ namespace SEProject2.UI
         /// Clears the editor, so the user can write a new solution for the grid
         /// </summary>
         /// <param name="gridText"> The text represention of the grid </param>
-
         public void LoadGridText(string gridText)
         {
             if (string.IsNullOrWhiteSpace(gridText))
@@ -194,14 +191,11 @@ namespace SEProject2.UI
         /// Opens a text file, loads its grid into the program service,
         /// and refreshes the grid displayed in the GUI.
         /// </summary>
-
-        private void LoadGrid()
+        private void LoadAsteroidField()
         {
-            using var dialog = new OpenFileDialog
-            {
-                Filter = "Text Files (*.txt)|*.txt|All Files(*.*)|*.*",
-                Title = "Select a grid file"
-            };
+            using var dialog = new OpenFileDialog();
+            dialog.Filter = "Text Files (*.txt)|*.txt|All Files(*.*)|*.*";
+            dialog.Title = "Select a grid file";
 
             if (dialog.ShowDialog() != DialogResult.OK)
                 return;
@@ -222,14 +216,11 @@ namespace SEProject2.UI
         /// <summary>
         /// Opens a file dialog and loads the selected program into the editor
         /// </summary>
-
         private void LoadFile()
         {
-            using var dialog = new OpenFileDialog
-            {
-                Filter = "Text Files (*.txt)|*.txt|All Files (*.*)|*.*",
-                Title = "Select a program "
-            };
+            using var dialog = new OpenFileDialog();
+            dialog.Filter = "Text Files (*.txt)|*.txt|All Files (*.*)|*.*";
+            dialog.Title = "Select a program ";
 
             if (dialog.ShowDialog() != DialogResult.OK)
                 return;
@@ -244,28 +235,30 @@ namespace SEProject2.UI
         }
 
         /// <summary>
-        /// Loads an example program from the Programs directory
+        /// Loads an example program from the Programs directory.
         /// </summary>
-        /// <param name="filename"> The name of the example program file </param>
-
-        private void LoadExample (string filename)
+        /// <param name="example">String denoting the example name.</param>
+        private void LoadExample(string example)
         {
-            string filePath = Path.Combine(AppContext.BaseDirectory, "Programs",filename);
-
-            try
+            switch(example)
             {
-                programEditor.Text = File.ReadAllText(filePath);
-                outputBox.Clear();
-                metricsBox.Clear();
-
-                currentPath = Array.Empty<(int X, int Y)>();
-                pathPanel.Invalidate();
+                case "Basic":
+                    programEditor.Text = LunarProgram._example1.Replace("\n", "\r\n");
+                    break;
+                case "Advanced":
+                    programEditor.Text = LunarProgram._example2.Replace("\n", "\r\n");
+                    break;
+                case "Expert":
+                    programEditor.Text = LunarProgram._example3.Replace("\n", "\r\n");
+                    break;
+                default:
+                    MessageBox.Show("Failed to load Example.", "An unexpected error occured.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    break;
             }
-            catch(Exception ex)
-            {
-                MessageBox.Show(ex.Message, $"Could not load example", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-
+            outputBox.Clear();
+            metricsBox.Clear();
+            currentPath = Array.Empty<(int X, int Y)>();
+            pathPanel.Invalidate();
         }
 
         /// <summary>
@@ -273,25 +266,23 @@ namespace SEProject2.UI
         /// </summary>
         private void LoadBasic()
         {
-            LoadExample("example1.txt");
+            LoadExample("Basic");
         }
 
         /// <summary>
         /// Loads the advanced example program
         /// </summary>
-
         private void LoadAdvanced()
         {
-            LoadExample("example2.txt");
+            LoadExample("Advanced");
         }
 
         /// <summary>
         /// Loads the expert example program
         /// </summary>
-
         private void LoadExpert()
         {
-            LoadExample("example3.txt");
+            LoadExample("Expert");
         }
 
         /// <summary>
@@ -299,7 +290,6 @@ namespace SEProject2.UI
         /// Displays the execution trace, final path and character path.
         /// Runtime errors are displayed in the output box
         /// </summary>
-
         private void RunProgram()
         {
             currentPath = Array.Empty<(int X, int Y)>();

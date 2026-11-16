@@ -34,7 +34,7 @@ public class ProgramService
     /// <exception cref="InvalidOperationException"> Throw when no grid has been loaded </exception>
     public void LoadProgramFromText(string name, string text)
     {
-        string[] lines = text.Replace("\r\n", "\n").Split('\n');
+        string[] lines = text.Replace("\r\n", "\n").Replace("\t", "  ").Split('\n');
         var parsedLines = LineParser.ParseBlock(lines);
 
         var commands = CommandFactory.FromLines(parsedLines);

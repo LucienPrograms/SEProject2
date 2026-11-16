@@ -112,7 +112,7 @@ public class CharacterTests
     public void AsteroidCollisionTest()
     {
         // Arrange
-        Luna luna = new Luna(new Space("oo\n+x"));
+        Luna luna = new Luna("oo\n+x");
 
         // Act
         luna.Turn(Direction.LeftRight.Right);
@@ -125,7 +125,7 @@ public class CharacterTests
     public void LeavingGridTest()
     {
         // Arrange
-        Luna luna = new Luna(new Space("oo\n+x"));
+        Luna luna = new Luna("oo\n+x");
 
         // Act
         luna.Turn(Direction.LeftRight.Left);
