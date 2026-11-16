@@ -32,13 +32,13 @@ internal static class Program
             switch (choiceNumber)
             {
                 case 1:
-                    prog = LunarProgram.Example1();
+                    prog = ProgramImporter.Example1();
                     break;
                 case 2:
-                    prog = LunarProgram.Example2();
+                    prog = ProgramImporter.Example2();
                     break;
                 case 3:
-                    prog = LunarProgram.Example3();
+                    prog = ProgramImporter.Example3();
                     break;
                 case 4:
                 {

@@ -14,7 +14,7 @@ public static class CommandFactory
     private const string Left = "left";
     private const string Times = "times";
     
-    private const string WallAhead = "GridAhead";
+    private const string WallAhead = "WallAhead";
     private const string GridEdge = "GridEdge";
 
     private static RepeatCondition? StringToCondition(string s) => 
