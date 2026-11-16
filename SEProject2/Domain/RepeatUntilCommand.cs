@@ -22,10 +22,8 @@ public class RepeatUntilCommand(RepeatCondition condition, IReadOnlyList<IComman
             foreach (var subCommand in SubCommands)
             {
                 subCommand.Execute(c);
-                conditionMet = CheckCondition(c);
             }
-
-            
+        conditionMet = CheckCondition(c);
         }
     }
 }
