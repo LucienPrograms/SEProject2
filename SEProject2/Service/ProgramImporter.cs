@@ -22,18 +22,4 @@ public static class ProgramImporter
 
     public static LunarProgram ImportFromString(string programName, string program) => 
         new(programName, CommandFactory.FromLines(LineParser.ParseBlock(program.Split('\n'))));
-    
-    private const string Example1Text = 
-        "Move 10\nTurn right\nMove 10\nTurn right\nMove 10\nTurn right\nMove 10\nTurn right";
-    private const string Example2Text = 
-        "Repeat 4 times\n    Move 10\n    Turn right";
-    private const string Example3Text = 
-        "Move 5\nTurn left\nTurn left\nMove 3\nTurn right\nRepeat 3 times\n    Move 1\n    Turn right\n    Repeat 5 times\n        Move 2\nTurn left";
-
-    public static LunarProgram Example1() =>
-        ImportFromString("Example 1", Example1Text);
-    public static LunarProgram Example2() =>
-        ImportFromString("Example 2", Example2Text);
-    public static LunarProgram Example3() =>
-        ImportFromString("Example 3", Example3Text);
 }

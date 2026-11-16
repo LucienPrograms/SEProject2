@@ -32,13 +32,13 @@ internal static class Program
             switch (choiceNumber)
             {
                 case 1:
-                    prog = ProgramImporter.Example1();
+                    prog = ExamplePrograms.Example1();
                     break;
                 case 2:
-                    prog = ProgramImporter.Example2();
+                    prog = ExamplePrograms.Example2();
                     break;
                 case 3:
-                    prog = ProgramImporter.Example3();
+                    prog = ExamplePrograms.Example3();
                     break;
                 case 4:
                 {
