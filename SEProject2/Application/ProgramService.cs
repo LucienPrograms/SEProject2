@@ -89,22 +89,10 @@ public class ProgramService
     /// <summary>
     /// Retrieves metrics for the currently loaded program
     /// </summary>
-    /// <returns> A tuple containing the command count, maximum nesting depth, and repeat count </returns>
+    /// <returns> A record containing the command count, maximum nesting depth, and repeat count </returns>
     /// <exception cref="InvalidOperationException"> Throw when no program has been loaded </exception>
-    public (int CommandCount, int MaxNestingDepth, int RepeatCount) GetMetrics()
-    {
-        if (currentProgram == null)
-        {
-            throw new InvalidOperationException("No program loaded.");
-        }
-
-        return (
-            currentProgram.CountCommands(),
-            currentProgram.MaxNesting(),
-            currentProgram.CountRepeats()
-        );
-
-
-    }
-
+    public ProgramMetrics GetMetrics() =>
+        currentProgram == null
+            ? throw new InvalidOperationException("No program loaded.")
+            : ProgramMetrics.FromProgram(currentProgram);
 }

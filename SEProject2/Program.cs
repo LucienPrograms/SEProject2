@@ -32,13 +32,13 @@ internal static class Program
             switch (choiceNumber)
             {
                 case 1:
-                    prog = LunarProgram.Example1();
+                    prog = ExamplePrograms.Example1();
                     break;
                 case 2:
-                    prog = LunarProgram.Example2();
+                    prog = ExamplePrograms.Example2();
                     break;
                 case 3:
-                    prog = LunarProgram.Example3();
+                    prog = ExamplePrograms.Example3();
                     break;
                 case 4:
                 {
@@ -85,9 +85,10 @@ internal static class Program
                 prog.Execute();
                 break;
             case "2":
-                Console.WriteLine($"Command count: {prog.CountCommands()}");
-                Console.WriteLine($"Max nesting: {prog.MaxNesting()}");
-                Console.WriteLine($"Repeat count: {prog.CountRepeats()}");
+                var metrics = ProgramMetrics.FromProgram(prog);
+                Console.WriteLine($"Command count: {metrics.CommandCount}");
+                Console.WriteLine($"Max nesting: {metrics.MaxNesting}");
+                Console.WriteLine($"Repeat count: {metrics.RepeatCommandCount}");
                 break;
 
             default:
