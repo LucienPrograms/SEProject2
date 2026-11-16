@@ -23,7 +23,6 @@ public class RepeatUntilCommand(RepeatCondition condition, IReadOnlyList<IComman
             {
                 subCommand.Execute(c);
             }
-
             conditionNotMet = CheckCondition(c);
         }
     }

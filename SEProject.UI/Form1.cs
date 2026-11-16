@@ -351,8 +351,8 @@ namespace SEProject2.UI
                 var metrics = programService.GetMetrics();
 
                 metricsBox.Text = $"Command count: {metrics.CommandCount}\r\n" + 
-                                  $"Max nesting depth: {metrics.MaxNestingDepth}\r\n" + 
-                                  $"Repeat count: {metrics.RepeatCount}\r\n";
+                                  $"Max nesting depth: {metrics.MaxNesting}\r\n" + 
+                                  $"Repeat count: {metrics.RepeatCommandCount}\r\n";
             }
             catch (Exception ex)
             {
