@@ -5,11 +5,11 @@ public class Luna
     public int X { get; private set; }
     public int Y { get; private set; }
     public Direction.Heading Facing { get; private set; }
-    private readonly List<string> _executedCommandTrace = [];
+    private readonly List<string> executedCommandTrace = [];
 
     public Space AsteroidField { get; }
 
-    private readonly List<(int X, int Y)> _path = new();
+    private readonly List<(int X, int Y)> path = [];
 
     /// <summary>
     /// Creates Luna without a loaded asteroid field. 
@@ -45,10 +45,10 @@ public class Luna
         Y = 0;
         Facing = Direction.Heading.East;
 
-        _executedCommandTrace.Clear();
+        executedCommandTrace.Clear();
 
-        _path.Clear();
-        _path.Add((X, Y));
+        path.Clear();
+        path.Add((X, Y));
     }
 
     public bool GoalReached() => AsteroidField.IsDestination(X, Y);
@@ -105,10 +105,10 @@ public class Luna
             Y += dy;
 
             //Record every position visited
-            _path.Add((X, Y));
+            path.Add((X, Y));
         }
 
-        _executedCommandTrace.Add($"Move {steps}");
+        executedCommandTrace.Add($"Move {steps}");
     }
 
     /// <summary>
@@ -120,12 +120,12 @@ public class Luna
         if (direction == Direction.LeftRight.Left)
         {
             Facing = Direction.Left[Facing];
-            _executedCommandTrace.Add("Turn left");
+            executedCommandTrace.Add("Turn left");
         }
         else
         {
             Facing = Direction.Right[Facing];
-            _executedCommandTrace.Add("Turn right");
+            executedCommandTrace.Add("Turn right");
         }  
     }
 
@@ -135,7 +135,7 @@ public class Luna
     /// <returns>string with location (X, Y) and the direction Luna is facing (Direction.Heading).</returns>
     public string GetState() => $"({X}, {Y}) facing {Facing}";
 
-    public IReadOnlyList<string> GetTraceEntries() => _executedCommandTrace.AsReadOnly();
+    public IReadOnlyList<string> GetTraceEntries() => executedCommandTrace.AsReadOnly();
 
-    public IReadOnlyList<(int X, int Y)> GetPath() => _path.AsReadOnly();
+    public IReadOnlyList<(int X, int Y)> GetPath() => path.AsReadOnly();
 }

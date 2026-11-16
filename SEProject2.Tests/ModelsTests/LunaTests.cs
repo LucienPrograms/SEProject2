@@ -8,7 +8,7 @@ public class CharacterTests
     public void StartingDirectionTest()
     {
         // Arrange
-        Luna luna = new Luna();
+        Luna luna = new();
             
         // Act
         Direction.Heading heading = luna.Facing;
@@ -21,7 +21,7 @@ public class CharacterTests
     public void StartingLocationTest()
     {
         // Arrange
-        Luna luna = new Luna();
+        Luna luna = new();
 
         // Act
         (int, int) location = (luna.X, luna.Y);
@@ -37,7 +37,7 @@ public class CharacterTests
     public void MoveStepsTest(uint steps, int expectedX, int expectedY)
     {
         // Arrange
-        Luna luna = new Luna();
+        Luna luna = new();
         (int, int) expected = (expectedX, expectedY);
 
         // Act
@@ -60,7 +60,7 @@ public class CharacterTests
     public void TurnCharacterTest(Direction.LeftRight turnDirection, int count, Direction.Heading expected)
     {
         // Arrange
-        Luna luna = new Luna();
+        Luna luna = new();
 
         // Act
         for (int i = 0; i < count; i++)
@@ -76,7 +76,7 @@ public class CharacterTests
     public void ResetCharacterToStartTest()
     {
         // Arrange
-        Luna luna = new Luna();
+        Luna luna = new();
     
         // Act
         luna.MoveForward(4);
@@ -97,7 +97,7 @@ public class CharacterTests
     public void ReachGoalTest()
     {
         // Arrange
-        Luna luna = new Luna(new Space("oo\n+x"));
+        Luna luna = new(new Space("oo\n+x"));
 
         // Act
         luna.MoveForward(1);
@@ -112,7 +112,7 @@ public class CharacterTests
     public void AsteroidCollisionTest()
     {
         // Arrange
-        Luna luna = new Luna("oo\n+x");
+        Luna luna = new("oo\n+x");
 
         // Act
         luna.Turn(Direction.LeftRight.Right);
@@ -125,7 +125,7 @@ public class CharacterTests
     public void LeavingGridTest()
     {
         // Arrange
-        Luna luna = new Luna("oo\n+x");
+        Luna luna = new("oo\n+x");
 
         // Act
         luna.Turn(Direction.LeftRight.Left);

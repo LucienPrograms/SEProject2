@@ -1,5 +1,4 @@
 ﻿using SEProject2.Domain;
-using SEProject2.Service;
 
 namespace SEProject2.Models;
 
@@ -7,7 +6,7 @@ public class LunarProgram(string name, List<ICommand> commands, Space? asteroidF
 {
     public string Name { get; set; } = name;
     public List<ICommand> Commands { get; set; } = commands;
-    public Luna Character { get; private set; } = 
+    public Luna Character { get; } = 
         asteroidField == null? new Luna() : new Luna(asteroidField);
 
     /// <summary>
