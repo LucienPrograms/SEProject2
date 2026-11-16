@@ -74,7 +74,7 @@ public class SpaceTests
 
     [Theory]
     [InlineData("oo\n-o\n-x")]
-    [InlineData("00\n-0\n-x")]
+    [InlineData("00\n+0\n+x")]
     [InlineData("abc\ndef\nghi")]
     public void InvalidSpaceCharacterTest(string asteroidFieldText)
     {

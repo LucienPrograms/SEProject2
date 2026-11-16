@@ -16,15 +16,16 @@ public class RepeatUntilCommand(RepeatCondition condition, IReadOnlyList<IComman
 
     public void Execute(Luna c)
     {
-        bool conditionNotMet = CheckCondition(c);
-        while (conditionNotMet)
+        bool conditionMet = CheckCondition(c);
+        while (!conditionMet)
         {
             foreach (var subCommand in SubCommands)
             {
                 subCommand.Execute(c);
+                conditionMet = CheckCondition(c);
             }
 
-            conditionNotMet = CheckCondition(c);
+            
         }
     }
 }
