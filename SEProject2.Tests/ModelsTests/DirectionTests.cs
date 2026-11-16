@@ -12,10 +12,7 @@ public class DirectionTests
     public void TestRight(Direction.Heading heading, Direction.Heading expectedHeading)
     {
         // arrange
-        Direction.Heading newHeading;
-
-        // act
-        newHeading = Direction.Right[heading];
+        Direction.Heading newHeading = Direction.Right[heading];
 
         // assert
         Assert.Equal(expectedHeading, newHeading);
@@ -29,10 +26,7 @@ public class DirectionTests
     public void TestLeft(Direction.Heading heading, Direction.Heading expectedHeading)
     {
         // arrange
-        Direction.Heading newHeading;
-
-        // act
-        newHeading = Direction.Left[heading];
+        Direction.Heading newHeading = Direction.Left[heading];
 
         // assert
         Assert.Equal(expectedHeading, newHeading);
@@ -46,11 +40,8 @@ public class DirectionTests
     public void TestStep(Direction.Heading heading, int expectedDeltaX, int expectedDeltaY)
     {
         // arrange
-        (int, int) delta;
+        (int, int) delta = Direction.Step[heading];
         (int, int) expected = (expectedDeltaX, expectedDeltaY);
-
-        //act
-        delta = Direction.Step[heading];
 
         // assert
         Assert.Equal(expected, delta);
