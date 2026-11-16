@@ -92,4 +92,45 @@ public class CharacterTests
         // Assert
         Assert.Equal((0, 0), location);
     }
+
+    [Fact]
+    public void ReachGoalTest()
+    {
+        // Arrange
+        Luna luna = new Luna(new Space("oo\n+x"));
+
+        // Act
+        luna.MoveForward(1);
+        luna.Turn(Direction.LeftRight.Right);
+        luna.MoveForward(1);
+
+        //Assert
+        Assert.True(luna.GoalReached());
+    }
+
+    [Fact]
+    public void AsteroidCollisionTest()
+    {
+        // Arrange
+        Luna luna = new Luna(new Space("oo\n+x"));
+
+        // Act
+        luna.Turn(Direction.LeftRight.Right);
+
+        //Assert
+        Assert.Throws<BlockedLocationException>(() => luna.MoveForward(1));
+    }
+
+    [Fact]
+    public void LeavingGridTest()
+    {
+        // Arrange
+        Luna luna = new Luna(new Space("oo\n+x"));
+
+        // Act
+        luna.Turn(Direction.LeftRight.Left);
+
+        //Assert
+        Assert.Throws<OutOfBoundsException>(() => luna.MoveForward(1));
+    }
 }

@@ -11,10 +11,10 @@ public class DirectionTests
     [InlineData(Direction.Heading.West, Direction.Heading.North)]
     public void TestRight(Direction.Heading heading, Direction.Heading expectedHeading)
     {
-        // arrange
+        // Arrange
         Direction.Heading newHeading = Direction.Right[heading];
 
-        // assert
+        // Assert
         Assert.Equal(expectedHeading, newHeading);
     }
 
@@ -25,10 +25,10 @@ public class DirectionTests
     [InlineData(Direction.Heading.West, Direction.Heading.South)]
     public void TestLeft(Direction.Heading heading, Direction.Heading expectedHeading)
     {
-        // arrange
+        // Arrange
         Direction.Heading newHeading = Direction.Left[heading];
 
-        // assert
+        // Assert
         Assert.Equal(expectedHeading, newHeading);
     }
 
@@ -39,11 +39,11 @@ public class DirectionTests
     [InlineData(Direction.Heading.West, 0, -1)]
     public void TestStep(Direction.Heading heading, int expectedDeltaX, int expectedDeltaY)
     {
-        // arrange
+        // Arrange
         (int, int) delta = Direction.Step[heading];
         (int, int) expected = (expectedDeltaX, expectedDeltaY);
 
-        // assert
+        // Assert
         Assert.Equal(expected, delta);
     }
 }

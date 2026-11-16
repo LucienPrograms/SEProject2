@@ -10,14 +10,14 @@ public class SpaceTests
     [InlineData("ooox", 1, 4)]
     public void SizeTest(string asteroidFieldText, int expectedHeight, int expectedWidth)
     {
-        // arrange
+        // Arrange
         Space asteroidField = new Space(asteroidFieldText);
 
-        // act
+        // Act
         int height = asteroidField.Height;
         int width = asteroidField.Width;
 
-        // assert
+        // Assert
         Assert.Equal(expectedHeight, height);
         Assert.Equal(expectedWidth, width);
     }
@@ -25,10 +25,10 @@ public class SpaceTests
     [Fact]
     public void AsteroidCollisionTest()
     {
-        // arrange
+        // Arrange
         Space asteroidField = new Space("oo\n+x");
 
-        // assert
+        // Assert
         Assert.Throws<BlockedLocationException>(() => asteroidField.Collision(1, 0));
     }
 
@@ -39,10 +39,10 @@ public class SpaceTests
     [InlineData("oo\n+o\nox", 0, 2)]
     public void OutOfBoundsCollisionTest(string asteroidFieldText, int xCoordinate, int yCoordinate)
     {
-        // arrange
+        // Arrange
         Space asteroidField = new Space(asteroidFieldText);
 
-        // assert
+        // Assert
         Assert.Throws<OutOfBoundsException>(() => asteroidField.Collision(xCoordinate, yCoordinate));
     }
 
@@ -50,10 +50,10 @@ public class SpaceTests
     public void IsDestinationTest()
 
     {
-        // arrange
+        // Arrange
         Space asteroidField = new Space("oo\n+o\n+x");
 
-        // assert
+        // Assert
         Assert.False(asteroidField.IsDestination(0, 0));
         Assert.False(asteroidField.IsDestination(1, 1));
         Assert.False(asteroidField.IsDestination(1, 0));
@@ -65,7 +65,7 @@ public class SpaceTests
     [InlineData("oo+++\n+oo+\n++o++\n++o++\n++oox")]
     public void InvalidSpaceSizeTest(string asteroidFieldText)
     {
-        // assert
+        // Assert
         Exception exception = Assert.Throws<InvalidSpaceException>(() => new Space(asteroidFieldText));
 
         // verify reason
@@ -78,7 +78,7 @@ public class SpaceTests
     [InlineData("abc\ndef\nghi")]
     public void InvalidSpaceCharacterTest(string asteroidFieldText)
     {
-        // assert
+        // Assert
         Exception exception = Assert.Throws<InvalidSpaceException>(() => new Space(asteroidFieldText));
 
         // verify reason
@@ -88,26 +88,26 @@ public class SpaceTests
     [Fact]
     public void EmptySpaceCollisionTest()
     {
-        // arrange
+        // Arrange
         Space asteroidField = new Space();
 
-        // act
+        // Act
         Exception? exception = Record.Exception(() => asteroidField.Collision(0, 0));
             
-        // assert
+        // Assert
         Assert.Null(exception);
     }
 
     [Fact]
     public void EmptySpaceDestinationTest()
     {
-        // arrange
+        // Arrange
         Space asteroidField = new Space();
 
-        // act
+        // Act
         Exception? exception = Record.Exception(() => asteroidField.IsDestination(0, 0));
             
-        // assert
+        // Assert
         Assert.Null(exception);
         Assert.True(asteroidField.IsDestination(0, 0));
     }

@@ -14,7 +14,6 @@ public class Luna
     /// <summary>
     /// Creates Luna without a loaded asteroid field. 
     /// </summary>
-
     public Luna() : this(new Space()) {}
 
     /// <summary>
@@ -24,6 +23,16 @@ public class Luna
     public Luna(Space asteroidField)
     {
         AsteroidField = asteroidField;
+        ResetToStart();
+    }
+
+    /// <summary>
+    /// Creates Luna with an asteroid field in text form.
+    /// </summary>
+    /// <param name="asteroidFieldText">The asteroid field in text form.</param>
+    public Luna(string asteroidFieldText)
+    {
+        AsteroidField = new Space(asteroidFieldText);
         ResetToStart();
     }
 
@@ -40,7 +49,6 @@ public class Luna
 
         _path.Clear();
         _path.Add((X, Y));
-
     }
 
     public bool GoalReached() => AsteroidField.IsDestination(X, Y);
@@ -90,8 +98,6 @@ public class Luna
     {
         (int dx, int dy) = Direction.Step[Facing];
 
-        
-
         for (int i = 0; i < steps; i++)
         {
             AsteroidField.Collision(X + dx, Y + dy);
@@ -101,7 +107,6 @@ public class Luna
             //Record every position visited
             _path.Add((X, Y));
         }
-
 
         _executedCommandTrace.Add($"Move {steps}");
     }
