@@ -29,7 +29,7 @@ namespace SEProject2.Tests.GUITests
                 Assert.NotNull(FindButton(form, "Expert"));
                 Assert.NotNull(FindButton(form, "Run"));
                 Assert.NotNull(FindButton(form, "Metrics"));
-                Assert.NotNull(FindButton(form, "Load grid"));
+                Assert.NotNull(FindButton(form, "Load Asteroid Field"));
 
                 Assert.NotNull(FindGroupBox(form, "Program Editor"));
                 Assert.NotNull(FindGroupBox(form, "Output"));
