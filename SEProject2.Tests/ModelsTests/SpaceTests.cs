@@ -33,10 +33,10 @@ public class SpaceTests
     }
 
     [Theory]
-    [InlineData("oo\n+o\nox", -1, 0)]
-    [InlineData("oo\n+o\nox", 0, -1)]
-    [InlineData("oo\n+o\nox", 3, 0)]
-    [InlineData("oo\n+o\nox", 0, 2)]
+    [InlineData("oo\n+o\n+x", -1, 0)]
+    [InlineData("oo\n+o\n+x", 0, -1)]
+    [InlineData("oo\n+o\n+x", 3, 0)]
+    [InlineData("oo\n+o\n+x", 0, 2)]
     public void OutOfBoundsCollisionTest(string asteroidFieldText, int xCoordinate, int yCoordinate)
     {
         // Arrange

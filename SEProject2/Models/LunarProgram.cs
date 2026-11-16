@@ -96,14 +96,14 @@ public class LunarProgram(string name, List<ICommand> commands, Space? asteroidF
         return repeats;
     }
 
-    public const string _example1 = "Move 10\nTurn right\nMove 10\nTurn right\nMove 10\nTurn right\nMove 10\nTurn right";
-    public const string _example2 = "Repeat 4 times\n    Move 10\n    Turn right";
-    public const string _example3 = "Move 5\nTurn left\nTurn left\nMove 3\nTurn right\nRepeat 3 times\n    Move 1\n    Turn right\n    Repeat 5 times\n        Move 2\nTurn left";
+    public const string Example1Text = "Move 10\nTurn right\nMove 10\nTurn right\nMove 10\nTurn right\nMove 10\nTurn right";
+    public const string Example2Text = "Repeat 4 times\n    Move 10\n    Turn right";
+    public const string Example3Text = "Move 5\nTurn left\nTurn left\nMove 3\nTurn right\nRepeat 3 times\n    Move 1\n    Turn right\n    Repeat 5 times\n        Move 2\nTurn left";
 
     public static LunarProgram Example1() =>
-        new("Example 1", CommandFactory.FromLines(LineParser.ParseBlock(_example1.Split('\n'))));
+        new("Example 1", CommandFactory.FromLines(LineParser.ParseBlock(Example1Text.Split('\n'))));
     public static LunarProgram Example2() =>
-        new("Example 2", CommandFactory.FromLines(LineParser.ParseBlock(_example2.Split('\n'))));
+        new("Example 2", CommandFactory.FromLines(LineParser.ParseBlock(Example2Text.Split('\n'))));
     public static LunarProgram Example3() =>
-        new("Example 3", CommandFactory.FromLines(LineParser.ParseBlock(_example3.Split('\n'))));
+        new("Example 3", CommandFactory.FromLines(LineParser.ParseBlock(Example3Text.Split('\n'))));
 }

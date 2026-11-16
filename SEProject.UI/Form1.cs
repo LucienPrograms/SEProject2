@@ -243,13 +243,13 @@ namespace SEProject2.UI
             switch(example)
             {
                 case "Basic":
-                    programEditor.Text = LunarProgram._example1.Replace("\n", "\r\n");
+                    programEditor.Text = LunarProgram.Example1Text.Replace("\n", "\r\n");
                     break;
                 case "Advanced":
-                    programEditor.Text = LunarProgram._example2.Replace("\n", "\r\n");
+                    programEditor.Text = LunarProgram.Example2Text.Replace("\n", "\r\n");
                     break;
                 case "Expert":
-                    programEditor.Text = LunarProgram._example3.Replace("\n", "\r\n");
+                    programEditor.Text = LunarProgram.Example3Text.Replace("\n", "\r\n");
                     break;
                 default:
                     MessageBox.Show("Failed to load Example.", "An unexpected error occured.", MessageBoxButtons.OK, MessageBoxIcon.Error);
