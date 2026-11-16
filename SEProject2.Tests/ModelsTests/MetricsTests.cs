@@ -42,7 +42,7 @@ public class MetricsTests
     public void TestNestedRepeats()
     {
         // Arrange
-        const string x = "Repeat 2 times\n    Repeat 3 times\n    RepeatUntil WallAhead\n    Turn left";
+        const string x = "Repeat 2 times\n    Repeat 3 times\n        RepeatUntil WallAhead\n            Turn left";
         var program = ProgramImporter.ImportFromString("Test nested repeat", x);
 
         // Act

@@ -33,7 +33,7 @@ public static class CommandFactory
     private static MoveCommand ParseMoveCommand(ParsedLine line)
     {
         var steps = uint.Parse(line.Parts[1]);
-        return CreateMove(steps);
+        return new MoveCommand(steps);
     }
 
     /// <summary>
@@ -44,14 +44,14 @@ public static class CommandFactory
     /// <exception cref="Exception">Direction to turn is invalid. Must be 'Right' or 'Left'.</exception>
     private static TurnCommand ParseTurnCommand(ParsedLine line)
     {
-        Direction.LeftRight direction = line.Parts[1] switch
+        var direction = line.Parts[1] switch
         {
             Right => Direction.LeftRight.Right,
             Left => Direction.LeftRight.Left,
             _ => throw new Exception("Invalid turn")
         };
 
-        return CreateTurn(direction);
+        return new TurnCommand(direction);
     }
 
     private static List<ICommand> ParseSubCommands(Queue<ParsedLine> lines, ParsedLine line)
@@ -71,14 +71,14 @@ public static class CommandFactory
         var times = uint.Parse(line.Parts[1]);
         if (line.Parts[2] != Times) throw new Exception("Malformed syntax");
         var subCommands = ParseSubCommands(lines, line);
-        return CreateRepeat(times, subCommands);
+        return new RepeatCommand(times, subCommands);
     }
     
     private static RepeatUntilCommand ParseRepeatUntilCommand(Queue<ParsedLine> lines, ParsedLine line)
     {
         var condition = StringToCondition(line.Parts[1]) ?? throw new Exception("Malformed syntax: invalid condition");
         var subCommands = ParseSubCommands(lines, line);
-        return CreateRepeatUntil(condition, subCommands);
+        return new RepeatUntilCommand(condition, subCommands);
     }
     
     /// <summary>
@@ -117,10 +117,4 @@ public static class CommandFactory
         
         return commands;
     }
-    
-    public static RepeatUntilCommand CreateRepeatUntil(RepeatCondition condition, IReadOnlyList<ICommand> subCommands) => new(condition, subCommands);
-    public static MoveCommand CreateMove(uint steps) => new(steps);
-    public static TurnCommand CreateTurn(Direction.LeftRight direction) => new(direction);
-
-    public static RepeatCommand CreateRepeat(uint amount, IReadOnlyList<ICommand> subCommands) => new(amount, subCommands);
 }
