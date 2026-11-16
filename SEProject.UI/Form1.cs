@@ -12,8 +12,8 @@ namespace SEProject2.UI
         private readonly TextBox outputBox = new();
         private readonly TextBox metricsBox = new();
         private readonly Panel pathPanel = new();
-        private string[] currentGrid = Array.Empty<string>();
-        private IReadOnlyList<(int X, int Y)> currentPath = Array.Empty<(int X, int Y)>();
+        private string[] currentGrid = [];
+        private IReadOnlyList<(int X, int Y)> currentPath = [];
 
         /// <summary>
         /// Initializes the main application window and builds the user interface
@@ -136,7 +136,7 @@ namespace SEProject2.UI
         /// <param name="text"> The text displayed on the button </param>
         /// <param name="action"> The action executed when the button is called </param>
         /// <returns> The created button </returns>
-        private Button CreateButton(string text, Action action)
+        private static Button CreateButton(string text, Action action)
         {
             var button = new Button
             {
@@ -175,7 +175,7 @@ namespace SEProject2.UI
             programService.LoadGridFromText(normalizedGrid);
 
             currentGrid = lines;
-            currentPath = Array.Empty<(int X, int Y)>();
+            currentPath = [];
 
             //The user writes a new solution for the loaded grid
             programEditor.Clear();
@@ -230,7 +230,7 @@ namespace SEProject2.UI
             outputBox.Clear();
             metricsBox.Clear();
 
-            currentPath = Array.Empty<(int X, int Y)>();
+            currentPath = [];
             RunProgram();
         }
 
@@ -257,7 +257,7 @@ namespace SEProject2.UI
             }
             outputBox.Clear();
             metricsBox.Clear();
-            currentPath = Array.Empty<(int X, int Y)>();
+            currentPath = [];
             pathPanel.Invalidate();
         }
 
@@ -292,7 +292,7 @@ namespace SEProject2.UI
         /// </summary>
         private void RunProgram()
         {
-            currentPath = Array.Empty<(int X, int Y)>();
+            currentPath = [];
             pathPanel.Invalidate();
             outputBox.Clear();
 
@@ -307,22 +307,22 @@ namespace SEProject2.UI
 
                 if (result.RuntimeError != null)
                 {
-                    outputBox.AppendText(Environment.NewLine + $"Runtime error: {result.RuntimeError}");
+                    outputBox.AppendText(Environment.NewLine + "Runtime error: {result.RuntimeError}");
                 }
                 else if (result.GoalReached)
                 {
-                    outputBox.AppendText(Environment.NewLine + $"Success: Goal reached");
+                    outputBox.AppendText(Environment.NewLine + "Success: Goal reached");
                 }
                 else
                 {
-                    outputBox.AppendText(Environment.NewLine + $"Failure: Goal not reached");
+                    outputBox.AppendText(Environment.NewLine + "Failure: Goal not reached");
                 }
 
             }
             catch (Exception ex)
             {
                 outputBox.Text = $"Runtime error: {ex.Message}";
-                currentPath = Array.Empty<(int X, int Y)>();
+                currentPath = [];
                 pathPanel.Invalidate();
             }
         }
@@ -341,8 +341,8 @@ namespace SEProject2.UI
                 var metrics = programService.GetMetrics();
 
                 metricsBox.Text = $"Command count: {metrics.CommandCount}\r\n" + 
-                                  $"Max nesting depth: {metrics.MaxNesting}\r\n" + 
-                                  $"Repeat count: {metrics.RepeatCommandCount}\r\n";
+                                  $"Max nesting depth: {metrics.MaxNestingDepth}\r\n" + 
+                                  $"Repeat count: {metrics.RepeatCount}\r\n";
             }
             catch (Exception ex)
             {
@@ -405,10 +405,13 @@ namespace SEProject2.UI
             if (currentPath.Count == 0)
                 return;
 
-            PointF[] points = currentPath.Select(p => new PointF(
-                offsetX + p.Y * cellSize + cellSize / 2f,
-                offsetY + p.X * cellSize + cellSize / 2f
-            )).ToArray();
+            PointF[] points =
+            [
+                .. currentPath.Select(p => new PointF(
+                    offsetX + p.Y * cellSize + cellSize / 2f,
+                    offsetY + p.X * cellSize + cellSize / 2f
+                ))
+            ];
 
             if (points.Length > 1)
             {

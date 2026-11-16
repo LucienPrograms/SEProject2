@@ -1,10 +1,5 @@
 ﻿
-using System;
-using System.Drawing;
-using System.Threading;
-using System.Windows.Forms;
 using SEProject2.UI;
-using Xunit;
 
 namespace SEProject2.Tests.GUITests
 {
@@ -70,6 +65,7 @@ namespace SEProject2.Tests.GUITests
             });
         }
 
+        /// <summary>
         /// Verifies that loading a grid clears the program editor,
         /// allowing the user to write a new solution.
         /// </summary>
@@ -320,7 +316,7 @@ namespace SEProject2.Tests.GUITests
 
                 Panel pathPanel = FindControl<Panel>(
                     pathGroup,
-                    control => true);
+                    _ => true);
 
                 pathPanel.Refresh();
 
@@ -391,7 +387,7 @@ namespace SEProject2.Tests.GUITests
 
             return FindControl<TextBox>(
                 groupBox,
-                textBox => true);
+                _ => true);
         }
 
         /// <summary>
@@ -416,7 +412,7 @@ namespace SEProject2.Tests.GUITests
                     return matchingControl;
                 }
 
-                T? nestedControl = FindControlOrNull<T>(
+                T? nestedControl = FindControlOrNull(
                     child,
                     predicate);
 
@@ -446,7 +442,7 @@ namespace SEProject2.Tests.GUITests
                     return matchingControl;
                 }
 
-                T? nestedControl = FindControlOrNull<T>(
+                T? nestedControl = FindControlOrNull(
                     child,
                     predicate);
 
